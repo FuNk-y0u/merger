@@ -8,6 +8,8 @@ from routes.lobby import *
 app = Flask(__name__)
 CORS(app)
 
+#NOTE: Make another server for videos
+
 # Global app states
 app.config[M_LOBBIES] = {}
 

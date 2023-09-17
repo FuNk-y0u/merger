@@ -20,6 +20,8 @@
 	</body>
 
 	<script>
+		const sv_ip = "http://127.0.0.1:8000";
+		const v_sv_ip = "http://127.0.0.1:8000";
 		async function server_query(endpoint, method, payload) {
 			let params = {
 				method: method,
@@ -34,10 +36,14 @@
 			}
 		
 			// TODO: Add a exception catcher for fetch.
-			const request = await fetch("https://fa5f-113-199-226-54.ngrok-free.app/" + endpoint, params);
+			const request = await fetch(sv_ip + endpoint, params);
 			let result = await request.text();
 			let data = JSON.parse(result);
 			return data;
+		}
+
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
 		}
 
 		async function sync(player, lobby_id) {
@@ -49,7 +55,8 @@
 				speed: player.speed
 			};
 			const response = await server_query("/lobby_update_host_state", "POST", host_state);
-			requestAnimationFrame(function() { sync(player, lobby_id) });
+			sync(player, lobby_id);
+			//requestAnimationFrame(function() { sync(player, lobby_id) });
 		}
 
 		async function create_lobby(event) {
@@ -71,8 +78,9 @@
 
 					let video = document.createElement("video");
 					let source = document.createElement('source');
-					source.src = "https://fa5f-113-199-226-54.ngrok-free.app/static/videos/" + lobby.movie_id + ".mp4";
+					source.src = v_sv_ip + "/static/videos/" + lobby.movie_id + ".mp4";
 					source.type = "video/mp4";
+					video.appendChild(source);
 					video.controls = true;
 					video.playsinline = true;
 					video.setAttribute("id", "player");
@@ -102,7 +110,8 @@
 				player.speed = host_state.speed;
 			}
 
-			requestAnimationFrame(function() { sync_watcher(player, lobby_id) });
+			sync_watcher(player, lobby_id);
+			//requestAnimationFrame(function() { sync_watcher(player, lobby_id) });
 		}
 
 		async function join_lobby(event) {
@@ -120,8 +129,9 @@
 
 				let video = document.createElement("video");
 				let source = document.createElement('source');
-				source.src = "https://fa5f-113-199-226-54.ngrok-free.app/static/videos/" + lobby.movie_id + ".mp4";
+				source.src = v_sv_ip + "/static/videos/" + lobby.movie_id + ".mp4";
 				source.type = "video/mp4";
+				video.appendChild(source);
 				video.controls = true;
 				video.playsinline = true;
 				video.setAttribute("id", "player2");
