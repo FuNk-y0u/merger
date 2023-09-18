@@ -8,8 +8,6 @@ from routes.lobby import *
 app = Flask(__name__)
 CORS(app)
 
-#NOTE: Make another server for videos
-
 # Global app states
 app.config[M_LOBBIES] = {}
 
@@ -18,6 +16,7 @@ app.add_url_rule("/lobby_add_movie", view_func=lobby_add_movie, methods=["POST"]
 app.add_url_rule("/lobby_join", view_func=lobby_join, methods=["POST"])
 app.add_url_rule("/lobby_update_host_state", view_func=lobby_update_host_state, methods=["POST"])
 app.add_url_rule("/lobby_get_host_state", view_func=lobby_get_host_state, methods=["POST"])
+app.add_url_rule("/get_video", view_func=video, methods=["get"])
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8000, debug=True)
+    app.run(host="25.25.207.120", port=8000, debug=True)

@@ -21,4 +21,4 @@ def watch():
         return Response("Bad request",status=404)
 
 def video():
-    return redirect(url_for('static',filename='videos/video.mp4'))
+    return redirect(url_for('static',filename=f'videos/{request.args.get("id")}.webm'))

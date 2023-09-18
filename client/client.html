@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+		<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+	</head>
+	<body>
+		<div id="frame">
+			<form id="create_form">
+				Movie id: <input type="text" id="movie_id"> <br>
+				<input type="submit" value="Create Lobby">
+			</form>
+
+			<form id="join_form">
+				User id: <input type="text" id="user_id"> <br>
+				Lobby id: <input type="text" id="lobby_id"> <br>
+				<input type="submit" value="Join Lobby">
+			</form>
+		</div>
+	</body>
+
+	<script>
+		const sv_ip = "http://25.25.207.120:8000";
+		const v_sv_ip = sv_ip;
+		async function server_query(endpoint, method, payload) {
+			let params = {
+				method: method,
+				headers: {
+					"Content-Type": "application/json",
+					"Accept": "application/json"
+				},
+			};
+		
+			if (method != "GET") {
+				params.body = JSON.stringify(payload);
+			}
+		
+			// TODO: Add a exception catcher for fetch.
+			const request = await fetch(sv_ip + endpoint, params);
+			let result = await request.text();
+			let data = JSON.parse(result);
+			return data;
+		}
+
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		async function sync(player, lobby_id) {
+			const host_state = {
+				lobby_id: lobby_id,
+				host_time: player.currentTime,
+				paused: player.paused,
+				playing: player.playing,
+				speed: player.speed
+			};
+			const response = await server_query("/lobby_update_host_state", "POST", host_state);
+			sync(player, lobby_id);
+			//requestAnimationFrame(function() { sync(player, lobby_id) });
+		}
+
+		async function create_lobby(event) {
+			event.preventDefault();
+
+			let movie_id = document.getElementById("movie_id").value;
+
+			let response = await server_query("/lobby_create", "POST", { "admin_id": 123 });
+			if (response.status == 200) {
+				let lobby = response.ext[0]
+
+				response = await server_query("/lobby_add_movie", "POST", { "movie_id": movie_id, "lobby_id": lobby.id});
+				if (response.status == 200) {
+					lobby = response.ext[0]
+					console.log(lobby)
+
+					let frame = document.getElementById("frame");
+					frame.innerHTML = "";
+
+					let video = document.createElement("video");
+					let source = document.createElement('source');
+					source.src = v_sv_ip + "/get_video?id=" + lobby.movie_id;
+					source.type = "video/webm";
+					video.appendChild(source);
+					video.controls = true;
+					video.playsinline = true;
+					video.setAttribute("id", "player");
+
+					frame.appendChild(video);
+
+					const player = new Plyr('#player');
+					sync(player, lobby.id);
+				}
+			}
+		}
+
+		async function sync_watcher(player, lobby_id) {
+			const response = await server_query("/lobby_get_host_state", "POST", { "lobby_id": lobby_id });
+			if (response.status == 200) {
+				host_state = response.ext[0];
+
+				if ((host_state.host_time - player.currentTime) > 1 || (host_state.host_time - player.currentTime) < -1) {
+					player.currentTime = host_state.host_time;
+				}
+				if (host_state.paused) {
+					player.pause();
+				}
+				if (host_state.playing) {
+					player.play();
+				}
+				player.speed = host_state.speed;
+			}
+
+			sync_watcher(player, lobby_id);
+			//requestAnimationFrame(function() { sync_watcher(player, lobby_id) });
+		}
+
+		async function join_lobby(event) {
+			event.preventDefault();
+
+			let user_id = document.getElementById("user_id").value;
+			let lobby_id = document.getElementById("lobby_id").value;
+
+			let response = await server_query("/lobby_join", "POST", { "lobby_id": lobby_id, "user_id": user_id });
+			if (response.status == 200) {
+				let lobby = response.ext[0]
+
+				let frame = document.getElementById("frame");
+				frame.innerHTML = "";
+
+				let video = document.createElement("video");
+				let source = document.createElement('source');
+				source.src = v_sv_ip + "/get_video?id=" + lobby.movie_id;
+				source.type = "video/webm";
+				video.appendChild(source);
+				video.controls = true;
+				video.playsinline = true;
+				video.setAttribute("id", "player2");
+
+				frame.appendChild(video);
+
+				const player = new Plyr('#player2', {
+					listeners: {
+						seek: function (e) {
+							e.preventDefault()
+							return false
+						}
+					}
+				});
+				
+				sync_watcher(player, lobby.id);
+			}
+
+		}
+
+		let form1 = document.getElementById("create_form");
+		form1.addEventListener('submit', create_lobby);
+
+		let form2 = document.getElementById("join_form");
+		form2.addEventListener('submit', join_lobby);
+	</script>
+</html>
