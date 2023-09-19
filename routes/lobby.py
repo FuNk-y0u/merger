@@ -1,9 +1,11 @@
 from inc   import *
 from utils import *
 from defines import *
+from routes.auth import auth_token
 
 from flask import current_app
 
+@auth_token
 def lobby_create() -> Response:
 	payload = request.get_json()
 
@@ -14,7 +16,10 @@ def lobby_create() -> Response:
 			[]
 		).as_json()
 
-	new_lobby = Lobby(payload["admin_id"])
+	admin_id = payload["admin_id"]
+
+	#TODO: Verify admin_id
+	new_lobby = Lobby(admin_id)
 
 	current_app.config[M_LOBBIES].update({new_lobby.id: new_lobby})
 
@@ -25,6 +30,7 @@ def lobby_create() -> Response:
 	).as_json()
 
 
+@auth_token
 def lobby_add_movie() -> Response:
 	payload = request.get_json()
 
@@ -47,6 +53,8 @@ def lobby_add_movie() -> Response:
 
 	#TODO: Handle the case of changing the movie in mid of watching
 	lobby = current_app.config[M_LOBBIES][lobby_id]
+
+	#TODO: Verify movie_id
 	lobby.movie_id = movie_id
 
 	return MResponse(
@@ -56,6 +64,7 @@ def lobby_add_movie() -> Response:
 	).as_json()
 
 
+@auth_token
 def lobby_join() -> Response:
 	payload = request.get_json()
 
@@ -77,6 +86,8 @@ def lobby_join() -> Response:
 		).as_json()
 
 	lobby = current_app.config[M_LOBBIES][lobby_id]
+
+	#TODO: Verify user_id
 	lobby.members.append(user_id)
 
 	return MResponse(
@@ -86,6 +97,7 @@ def lobby_join() -> Response:
 	).as_json()
 
 
+@auth_token
 def lobby_update_host_state() -> Response:
 	payload = request.get_json()
 
@@ -131,6 +143,7 @@ def lobby_update_host_state() -> Response:
 	).as_json()
 
 
+@auth_token
 def lobby_get_host_state() -> Response:
 	payload = request.get_json()
 

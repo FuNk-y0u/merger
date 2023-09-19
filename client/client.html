@@ -20,7 +20,7 @@
 	</body>
 
 	<script>
-		const sv_ip = "http://25.25.207.120:8000";
+		const sv_ip = "https://4ba2-113-199-225-68.ngrok-free.app/";
 		const v_sv_ip = sv_ip;
 		async function server_query(endpoint, method, payload) {
 			let params = {
@@ -78,7 +78,7 @@
 
 					let video = document.createElement("video");
 					let source = document.createElement('source');
-					source.src = v_sv_ip + "/get_video?id=" + lobby.movie_id;
+					source.src = v_sv_ip + "/static/videos/" + lobby.movie_id + ".webm";
 					source.type = "video/webm";
 					video.appendChild(source);
 					video.controls = true;

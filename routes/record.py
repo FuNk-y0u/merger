@@ -7,10 +7,3 @@ class HostState:
         self.paused = paused
         self.playing = playing
         self.speed = speed
-    
-def record():
-    response = request.get_json()
-    print(response)
-    current_app.config[response["token"]] = HostState(response["hostTime"], response["paused"], response["playing"], response["speed"])
-    return Response(status=200)
-    
