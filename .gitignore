@@ -1,2 +1,4 @@
 __pycache__/
 routes/__pycache__/
+instance/
+database/

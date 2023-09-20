@@ -1,6 +1,7 @@
 from inc   import *
 from utils import *
 from defines import *
+from model import *
 from routes.auth import auth_token
 
 from flask import current_app
@@ -18,7 +19,14 @@ def lobby_create() -> Response:
 
 	admin_id = payload["admin_id"]
 
-	#TODO: Verify admin_id
+	query = User.query.filter_by(id=admin_id).first()
+	if not query:
+		return MResponse(
+			FAILED,
+			"Invalid `admin_id`",
+			[]
+		).as_json()
+
 	new_lobby = Lobby(admin_id)
 
 	current_app.config[M_LOBBIES].update({new_lobby.id: new_lobby})
@@ -54,7 +62,14 @@ def lobby_add_movie() -> Response:
 	#TODO: Handle the case of changing the movie in mid of watching
 	lobby = current_app.config[M_LOBBIES][lobby_id]
 
-	#TODO: Verify movie_id
+	query = Movie.query.filter_by(id=movie_id).first()
+	if not query:
+		return MResponse(
+			FAILED,
+			"Invalid movie id.",
+			[]
+		).as_json()
+
 	lobby.movie_id = movie_id
 
 	return MResponse(
@@ -87,7 +102,14 @@ def lobby_join() -> Response:
 
 	lobby = current_app.config[M_LOBBIES][lobby_id]
 
-	#TODO: Verify user_id
+	query = User.query.filter_by(id=user_id).first()
+	if not query:
+		return MResponse(
+			FAILED,
+			"Invalid `user_id`",
+			[]
+		).as_json()
+
 	lobby.members.append(user_id)
 
 	return MResponse(

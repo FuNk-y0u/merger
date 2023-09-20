@@ -3,7 +3,6 @@ from inc import *
 from defines import *
 from model import *
 from routes.watch import watch, video
-from routes.record import record
 from routes.lobby import *
 from routes.registration import *
 

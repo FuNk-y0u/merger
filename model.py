@@ -23,3 +23,8 @@ class User(pdb.Model, UserMixin):
 		return check_password_hash(
 			self.password_hash, password + self.password_salt
 		)
+
+
+class Movie(pdb.Model, UserMixin):
+	id    = pdb.Column(pdb.String(128), primary_key=True)
+	title = pdb.Column(pdb.String(100))
