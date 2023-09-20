@@ -1,15 +1,36 @@
 {
   "name": "merger-electron",
   "version": "1.0.0",
-  "description": "",
+  "description": "a platform to watch movies together",
   "main": "main.js",
+  
   "scripts": {
-    "start": "electron src/main.js"
+    "start": "electron src/main.js",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "merger-app",
+    "dmg": {
+      "title": "${productName} ${version}"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^26.2.1"
+    "electron": "^26.2.1",
+    "electron-builder": "^24.6.4"
   }
+  
+  
 }

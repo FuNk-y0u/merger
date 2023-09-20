@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <script>
+            const tray = new Tray('/')
+
+            const contextMenu = Menu.buildFromTemplate([
+                {label: 'Cool', type: 'radio'},
+            ])
+
+            tray.setToolTip('Electron rocks');
+        </script>
+        <style>
+            #menu-bar {
+            -webkit-app-region: drag;
+            } 
+        </style>
+    </head>
+
+    <body>
+        <h1>Hello from merger</h1>
+    </body>
+</html>
