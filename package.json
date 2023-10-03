@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "a platform to watch movies together",
   "main": "main.js",
-  
   "scripts": {
-    "start": "electron /main.js ",
+    "start": "electron main.js ",
     "dist": "electron-builder"
   },
   "build": {
@@ -28,7 +27,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^26.2.1",
+    "electron": "^26.2.4",
     "electron-builder": "^24.6.4"
   }
 }

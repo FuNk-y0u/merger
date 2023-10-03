@@ -13,6 +13,6 @@ app.whenReady().then(
             }
         );
 
-        window.loadFile('html/index.html');
+        window.loadFile('html/login.html');
     }
 )
