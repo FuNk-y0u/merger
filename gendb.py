@@ -1,15 +1,16 @@
-from inc import *
-from model import *
 from app import *
 
 import sys
-
-# Create movies directory
-if not os.path.exists("database"):
-	os.mkdir("database")
+import shutil
 
 
 def add_movie(path: str, title: str):
+	# Checking if movie already exists
+	query = Movie.query.filter_by(title=title).first()
+	if query:
+		return
+
+	# Creating new movie object
 	id = str(uuid.uuid4())
 	new_movie = Movie(
 		id=id,
@@ -18,12 +19,19 @@ def add_movie(path: str, title: str):
 	pdb.session.add(new_movie)
 	pdb.session.commit()
 
-	os.system(f"copy {path} database\\{id}.webm")
+	shutil.copy2(path, f"instance/videos/{id}.webm");
 	print(f"Sucessfully copied `{title}` to the database.")
 
 with app.app_context():
 	pdb.create_all()
 
-	add_movie("static\\videos\\video.webm", "video")
+	# Create movies directory
+	if not os.path.exists("instance/videos"):
+		os.mkdir("instance/videos")
+
+
+	add_movie("static/videos/sad_edit.webm", "sad_edit")
+	add_movie("static/videos/to_be_continued.webm", "to_be_continued")
+	add_movie("static/videos/101.webm", "type")
 
 	sys.exit(0)
