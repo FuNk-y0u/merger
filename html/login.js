@@ -1,7 +1,8 @@
 import {
 	server_ip,
 	server_query,
-	response_status
+	response_status,
+	redirect
 } from "./util.js";
 import { Modal } from "./modal.js"
 
@@ -36,9 +37,8 @@ button.addEventListener("click", async () => {
 
 	// Saving the token
 	let token = response.ext[0].token;
-	console.log(token);
 	localStorage.setItem("token", token);
 
 	// Redirect
-	window.location.href="loading.html"
+	redirect("loading.html");
 });

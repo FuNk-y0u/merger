@@ -26,4 +26,37 @@ const server_query = async (endpoint, method, payload) => {
 	return data;
 }
 
-export { server_ip, server_query, response_status }
+const auth = async () => {
+	let payload = {
+		token: localStorage.getItem("token")
+	};
+	let response = await server_query("/auth", "POST", payload);
+
+	if (response.status == response_status.SUCESS) {
+		let user = response.ext[0];
+		localStorage.setItem("user_id", user.id);
+		localStorage.setItem("email", user.email);
+		localStorage.setItem("username", user.username);
+		return response;
+	}
+	return response;
+}
+
+const redirect = async (path) => {
+	let res = await auth();
+	if (res.status != response_status.SUCESS) {
+		// TODO: Show some error
+		alert("Failed to authenticate");
+		return;
+	}
+
+	window.location.href = path;
+}
+
+export {
+	server_ip,
+	server_query,
+	response_status,
+	auth,
+	redirect
+}

@@ -1,7 +1,8 @@
 import {
 	server_ip,
 	server_query,
-	response_status
+	response_status,
+	redirect
 } from "./util.js";
 import { Modal } from "./modal.js"
 
@@ -45,7 +46,19 @@ button.addEventListener("click", async () => {
 		return;
 	}
 
-	modal.set_title("Sucess");
-	modal.set_body(response.log);
-	modal.show();
+	// Loging in
+	response = await server_query("/login", "POST", payload);
+	if (response.status == response_status.FAILED) {
+		modal.set_title("Login Error!");
+		modal.set_body(response.log);
+		modal.show();
+		return;
+	}
+
+	// Saving the token
+	let token = response.ext[0].token;
+	localStorage.setItem("token", token);
+
+	// Redirect
+	redirect("loading.html");
 });
