@@ -10,12 +10,24 @@
 	</head>
 
 	<style>
+		/* New and functioning grid system added -Rob */
+		.movie-grid{
+			width: 100vw;
+			height: 100vw;
+			display: grid;
+			grid-template-columns: repeat(5,1fr);
+			grid-template-rows: repeat(4, 1fr);
+			gap: 10px;
+			padding: 10px;
+			box-sizing: border-box;
+		}
 		#show{
-			width: 240px;
-			height: 350px;
+			grid-column-start: auto;
+			grid-row-start: auto;
+			width: 100%;
+			height: 100%;
 			background-color: rgb(116, 137, 255);
 			border-radius: 5px;
-			margin: 10px;
 			transition: background-color 1s ease-out 100ms;
 		}
 		#show:hover{
@@ -35,12 +47,8 @@
 				</div>
 			</nav>
 		 </div>
-
-		 <div class="container text-center px-4">
-			 <div class="row gx-2" id="movie_grid">
-			 </div>
+		 <div class="movie-grid" id="movie_grid">
 		 </div>
-
 		 <div id="modal_root"></div>
 	</body>
 </html>

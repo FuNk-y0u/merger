@@ -45,13 +45,14 @@ window.onload = async () => {
 
 	let videos = response.ext[0]
 	for (let video in videos) {
+
+		// *! Remove some unnecessary codes - Rob
+
 		let pannel = document.createElement("div");
-		pannel.setAttribute("class", "col");
 		pannel.setAttribute("id", video);
 
 		let thumbnail = document.createElement("div");
 		thumbnail.setAttribute("id", "show");
-		thumbnail.setAttribute("class", "mx-auto");
 
 		let title = document.createElement("p");
 		title.innerHTML = videos[video];
