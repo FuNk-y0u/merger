@@ -22,7 +22,7 @@ join_lobby_button.addEventListener("click", () => {
 		return;
 	}
 
-	redirect(`watch_lobby.html?id=${lobby_id}`);
+	redirect(`../html/watch_lobby.html?id=${lobby_id}`);
 });
 
 // Video card
@@ -30,7 +30,7 @@ function add_event_listener(element, movies) {
 	element.addEventListener("click", () => {
 		let id = element.id;
 		let title = movies[element.id];
-		redirect(`host_lobby.html?id=${id}&title=${title}`);
+		redirect(`../html/host_lobby.html?id=${id}&title=${title}`);
 	});
 }
 

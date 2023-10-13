@@ -65,7 +65,7 @@ window.onload = async () => {
 		//TODO: Show error or something
 		alert("Failed to create lobby");
 
-		redirect("home.html");
+		redirect("../html/home.html");
 		return;
 	}
 

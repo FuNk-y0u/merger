@@ -12,6 +12,6 @@ app.whenReady().then(
 				
 			}
 		);
-		window.loadFile('html/login.html');
+		window.loadFile('src/html/login.html');
 	}
 )
