@@ -6,6 +6,8 @@ app.whenReady().then(
 			{
 				width: 854,
 				height: 480,
+				"minHeight": 480,
+				"minWidth": 854,
 				webPreferences: {
 					nodeIntegration: true
 				},

@@ -45,16 +45,15 @@ window.onload = async () => {
 
 	let videos = response.ext[0]
 	for (let video in videos) {
-
-		// *! Remove some unnecessary codes - Rob
-
 		let pannel = document.createElement("div");
 		pannel.setAttribute("id", video);
+		pannel.setAttribute("class","show")
 
 		let thumbnail = document.createElement("div");
-		thumbnail.setAttribute("id", "show");
+		thumbnail.setAttribute("class", "thumbnail");
 
 		let title = document.createElement("p");
+		title.setAttribute("class","title");
 		title.innerHTML = videos[video];
 
 		pannel.appendChild(thumbnail);
