@@ -12,6 +12,16 @@ const video = document.getElementById("player");
 const modal_root = document.getElementById("modal_root");
 const modal = new Modal(modal_root);
 
+const button = document.getElementById("copy_clipboard");
+
+button.addEventListener("click", async() => {
+	var copyText = document.getElementById("lobby_id").innerHTML;
+	navigator.clipboard.writeText(copyText);
+	modal.set_title("Copy to clipboard");
+	modal.set_body("Copied " + copyText + " to clipboard");
+	modal.show();
+})
+
 async function create_lobby(movie_id) {
 	// Creating lobby
 	let payload = {

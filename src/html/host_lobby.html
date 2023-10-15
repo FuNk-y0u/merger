@@ -12,7 +12,9 @@
 		<script type="module" src="../js/util.js"></script>
 		<script type="module" src="../js/host_lobby.js"></script>
 	</head>
-
+	<script>
+		
+	</script>
 	<style>
 		#frame{
 			display: flex;
@@ -21,25 +23,34 @@
 			padding: 5%;
 			justify-content: center;
 		}
+		.copy_button{
+			background-color: rgb(48, 158, 255);
+			border-radius: 5px;
+			border: 0;
+		}
 	</style>
 	<body>
 		 <div>
 			<nav class="navbar bg-body-tertiary">
 				<div class="container-fluid">
 					<a class="navbar-brand" href="home.html"><i class="fa-solid fa-arrow-left"></i></a>
-					<div class="d-flex">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-copy" style="color: #000000;"></i></span>
-						</div>
-						<p class="d-flex"> Lobby id: </p>
-						<p class="d-flex" id="lobby_id"></p>
-					</div>
 				</div>
 			</nav>
 		 </div>
+		 <div class="card text-center">
+			<div class="card-header">
+			  Lobby Code
+			</div>
+			<div class="card-body">
+			  <h5 class="card-title" id="lobby_id"></h5>
+			  <p class="card-text">Share lobby code to watch together</p>
+			  <a href="#" class="btn btn-primary" id="copy_clipboard"><i class="fa-solid fa-copy" style="color: #ffffff;"></i> Copy code</a>
+			</div>
+		  </div>
 		<div id="frame">
 			<video id="player" playsinline controls></video>
 		</div>
 		<div id="modal_root"></div>
 	</body>
+	<script type="module" src="../js/host_lobby.js"></script>
 </html>
