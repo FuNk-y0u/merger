@@ -5,6 +5,7 @@ from src.inc import *
 SUCESS        = 200
 FAILED        = 400
 TOKEN_EXIPRED = 401
+NO_ADMIN      = 402
 NOT_FOUND     = 404
 
 
@@ -28,7 +29,7 @@ class HostState:
 		)
 
 class Lobby:
-	def __init__(self, admin_id: int): #FIXME: Admin id is an int for now. Will use UUID's when DB is implemented
+	def __init__(self, admin_id: str):
 		self.id = str(uuid.uuid4())
 		self.admins = [admin_id]
 		self.members = [admin_id]
