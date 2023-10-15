@@ -12,6 +12,36 @@ const video = document.getElementById("player");
 const modal_root = document.getElementById("modal_root");
 const modal = new Modal(modal_root);
 
+/*
+ * Return button
+ */
+
+const return_button = document.getElementById("return");
+
+return_button.addEventListener("click", async () => {
+	let token    = localStorage.getItem("token");
+	let user_id  = localStorage.getItem("user_id");
+	let lobby_id = url_params.get("id");
+
+	// Leaving the lobby
+	let payload = {
+		token   : token,
+		user_id : user_id,
+		lobby_id: lobby_id
+	};
+	let response = await server_query("/lobby_leave", "POST", payload);
+
+	if (response.status == response_status.SUCESS) {
+		redirect("../html/home.html");
+	}
+	alert(response.log);
+});
+
+
+/*
+ * Queries backend to join the lobby
+ */
+
 async function join_lobby(lobby_id) {
 	let payload = {
 		token   : localStorage.getItem("token"),
@@ -29,6 +59,10 @@ async function join_lobby(lobby_id) {
 	return lobby;
 }
 
+/*
+ * Queries backend for host state to syncronize player
+ */
+
 async function sync_player(player, lobby_id) {
 	let payload = {
 		token   : localStorage.getItem("token"),
@@ -37,9 +71,17 @@ async function sync_player(player, lobby_id) {
 
 	let response = await server_query("/lobby_get_host_state", "POST", payload);
 	if (response.status != response_status.SUCESS) {
-		modal.set_title("Server error");
-		modal.set_body(response.log);
-		modal.show();
+		alert(response.log);
+
+		// Leaving the lobby
+		payload = {
+			token   : localStorage.getItem("token"),
+			user_id : localStorage.getItem("user_id"),
+			lobby_id: lobby_id
+		};
+		await server_query("/lobby_leave", "POST", payload);
+
+		redirect("../html/home.html");
 		return;
 	}
 

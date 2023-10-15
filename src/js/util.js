@@ -2,6 +2,7 @@ const response_status = {
 	SUCESS        : 200,
 	FAILED        : 400,
 	TOKEN_EXIPRED : 401,
+	NO_ADMIN      : 402,
 	NOT_FOUND     : 404
 };
 

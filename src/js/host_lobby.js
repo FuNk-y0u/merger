@@ -12,18 +12,50 @@ const video = document.getElementById("player");
 const modal_root = document.getElementById("modal_root");
 const modal = new Modal(modal_root);
 
+/*
+ * Return button
+ */
+
+const return_button = document.getElementById("return");
+
+return_button.addEventListener("click", async () => {
+	let token    = localStorage.getItem("token");
+	let user_id  = localStorage.getItem("user_id");
+	let lobby_id = document.getElementById("lobby_id").innerHTML;
+
+	// Leaving the lobby
+	let payload = {
+		token   : token,
+		user_id : user_id,
+		lobby_id: lobby_id
+	};
+	let response = await server_query("/lobby_leave", "POST", payload);
+
+	if (response.status == response_status.SUCESS) {
+		redirect("../html/home.html");
+	}
+	alert(response.log);
+});
+
+/*
+ * Clipboard system
+ */
+
 const button = document.getElementById("copy_clipboard");
 
-button.addEventListener("click", async() => {
+button.addEventListener("click", async () => {
 	var copyText = document.getElementById("lobby_id").innerHTML;
 	navigator.clipboard.writeText(copyText);
 	modal.set_title("Copy to clipboard");
 	modal.set_body("Copied " + copyText + " to clipboard");
 	modal.show();
-})
+});
+
+/*
+ * Querying backend to create a lobby.
+ */
 
 async function create_lobby(movie_id) {
-	// Creating lobby
 	let payload = {
 		token: localStorage.getItem("token"),
 		admin_id: localStorage.getItem("user_id")
@@ -52,6 +84,11 @@ async function create_lobby(movie_id) {
 	lobby = response.ext[0];
 	return lobby;
 }
+
+
+/*
+ * Queries the backend to update the host state
+ */
 
 async function sync_player(player, lobby_id) {
 	let host_state = {
