@@ -37,4 +37,4 @@ app.add_url_rule("/get_video", view_func=get_video, methods=["GET"])
 app.add_url_rule("/get_video_list", view_func=get_video_list, methods=["GET"])
 
 if __name__ == "__main__":
-  app.run(host="127.0.0.1", port=8080, debug=True)
+  app.run(host="127.0.0.1", port=os.getenv("PORT"), debug=True)
