@@ -13,7 +13,7 @@ CORS(app)
 load_dotenv()
 
 # Initializing database
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL")
 pdb.init_app(app)
 
 # Global app states

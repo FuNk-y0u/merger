@@ -19,16 +19,15 @@ def add_movie(path: str, title: str):
 	pdb.session.add(new_movie)
 	pdb.session.commit()
 
-	shutil.copy2(path, f"instance/videos/{id}.webm");
+	shutil.copy2(path, f"database/{id}.webm");
 	print(f"Sucessfully copied `{title}` to the database.")
 
 with app.app_context():
 	pdb.create_all()
 
 	# Create movies directory
-	if not os.path.exists("instance/videos"):
-		os.mkdir("instance/videos")
-
+	if not os.path.exists("database"):
+		os.mkdir("database")
 
 	add_movie("static/videos/sad_edit.webm", "sad_edit")
 	add_movie("static/videos/to_be_continued.webm", "to_be_continued")
