@@ -7,3 +7,4 @@ werkzeug==2.3.0
 python-dotenv
 pyjwt
 psycopg2
+psycopg2-binary
