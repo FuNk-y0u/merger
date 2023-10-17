@@ -5,6 +5,5 @@ flask_sqlalchemy
 flask_login
 werkzeug==2.3.0
 python-dotenv
-jwt
+pyjwt
 psycopg2
-psycopg2-binary
