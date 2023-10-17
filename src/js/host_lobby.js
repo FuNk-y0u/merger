@@ -33,6 +33,7 @@ return_button.addEventListener("click", async () => {
 
 	if (response.status == response_status.SUCESS) {
 		redirect("../html/home.html");
+		return;
 	}
 	alert(response.log);
 });

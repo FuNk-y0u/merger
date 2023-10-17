@@ -6,7 +6,7 @@ const response_status = {
 	NOT_FOUND     : 404
 };
 
-const server_ip = "http://127.0.0.1:8000";
+const server_ip = "http://127.0.0.1:8080";
 
 const server_query = async (endpoint, method, payload) => {
 	let params = {
