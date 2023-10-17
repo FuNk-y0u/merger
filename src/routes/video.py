@@ -3,7 +3,7 @@ from src.defines import *
 from src.model import *
 
 def get_video():
-	return send_file(f'instance/videos/{request.args.get("id")}.webm')
+	return send_file(f'database/{request.args.get("id")}.webm')
 
 def get_video_list() -> Response:
 	query = Movie.query.all()
