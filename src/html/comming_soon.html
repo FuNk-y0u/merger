@@ -2,15 +2,15 @@
 <html>
 	<head>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+		<script src="https://kit.fontawesome.com/0d4140c03e.js" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 		<script type="module" src="../js/modal.js"></script>
 		<script type="module" src="../js/util.js"></script>
-		<script type="module" src="../js/home.js"></script>
+		<script type="module" src="../js/comming_soon.js"></script>
 	</head>
 
 	<style>
-		/* New and functioning grid system added -Rob */
 		.movie-grid{
 			width: 100%;
 			height: 100%;
@@ -51,23 +51,42 @@
 	</style>
 
 	<body>
-		 <div>
+		<div>
 			<nav class="navbar bg-body-tertiary">
 				<div class="container-fluid">
-					<a class="navbar-brand">Merger</a>
+					<a class="navbar-brand" id="return" href="home.html"><i class="fa-solid fa-arrow-left"></i></a>
 					<form class="d-flex" onsubmit="return false;" role="search">
-						<input class="form-control me-2" id="lobby_id" type="search" placeholder="Lobby id" aria-label="Lobby id">
-						<button class="btn btn-outline-success" id="join_lobby">Join</button>
+						<input class="form-control me-2" id="movie_name" type="search" placeholder="Movie name" aria-label="Movie name">
+						<button class="btn btn-outline-success" id="add_movie" data-bs-toggle="modal" data-bs-target="#movie_selection_modal">Add</button>
 					</form>
 				</div>
 			</nav>
-		 </div>
-		 <div>
-			 Want to add more movies?
-			 <a href="comming_soon.html"> Add movie </a>
-		 </div>
-		 <div class="movie-grid" id="movie_grid">
-		 </div>
-		 <div id="modal_root"></div>
+		</div>
+
+		<h2> Comming Soon! </h2>
+
+		<div class="movie-grid" id="movie_grid">
+		</div>
+		<div id="modal_root"></div>
+
+		<!-- Movie selection modal -->
+		<div id="movie_selection_modal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<h4 class="modal-title">Which movie are you refering to?</h4>
+					</div>
+
+					<div class="modal-body movie-grid" id="movie_selector_body">
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</body>
 </html>

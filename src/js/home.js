@@ -35,7 +35,7 @@ function add_event_listener(element, movies) {
 }
 
 window.onload = async () => {
-	let response = await server_query("/get_video_list", "GET", {});
+	let response = await server_query("/get_video_list?uploaded=True", "GET", {});
 	if (response.status == response_status.FAILED) {
 		modal.set_title("Error");
 		modal.set_body(response.log);
@@ -44,17 +44,20 @@ window.onload = async () => {
 	}
 
 	let videos = response.ext[0]
-	for (let video in videos) {
+	for (let video_id in videos) {
+		let video = videos[video_id];
+
 		let pannel = document.createElement("div");
-		pannel.setAttribute("id", video);
+		pannel.setAttribute("id", video_id);
 		pannel.setAttribute("class","show")
 
-		let thumbnail = document.createElement("div");
+		let thumbnail = document.createElement("img");
 		thumbnail.setAttribute("class", "thumbnail");
+		thumbnail.src = video.poster_url;
 
 		let title = document.createElement("p");
 		title.setAttribute("class","title");
-		title.innerHTML = videos[video];
+		title.innerHTML = video.title;
 
 		pannel.appendChild(thumbnail);
 		pannel.appendChild(title);

@@ -1,0 +1,126 @@
+import {
+	server_ip,
+	server_query,
+	response_status,
+	redirect
+} from "./util.js";
+import { Modal } from "./modal.js"
+
+const movie_grid = document.getElementById("movie_grid");
+const modal_root = document.getElementById("modal_root");
+
+const modal = new Modal(modal_root);
+const movie_selector_modal = new bootstrap.Modal(
+	document.getElementById("movie_selection_modal")
+);
+const movie_selector_body = document.getElementById("movie_selector_body");
+
+/*
+ * Queries the backend to save the selected movie to the comming soon page.
+ */
+
+function add_event_listener(element, movies) {
+	element.addEventListener("click", async () => {
+		let id = element.id;
+		let payload = movies[element.id];
+		payload.token =  localStorage.getItem("token")
+
+		// Quering the backend to save the new movie
+		let response = await server_query("/add_new_movie", "POST", payload);
+
+		movie_selector_modal.hide();
+
+		modal.set_title("Sucess");
+		if (response.status != response_status.SUCESS) {
+			modal.set_title("Error");
+		}
+		modal.set_body(response.log);
+		modal.show();
+	});
+}
+
+/*
+ * Queries backend with movie name and displays the closest results
+ */
+
+const add_movie_button = document.getElementById("add_movie");
+add_movie.addEventListener("click", async () => {
+	movie_selector_body.innerHTML = ""
+
+	let movie_name = document.getElementById("movie_name").value;
+	if (!movie_name) {
+		modal.set_title("Error");
+		modal.set_body("Movie name cannot be empty.");
+		modal.show();
+		return;
+	}
+
+	// Quering the backend for the result
+	let payload = {
+		token: localStorage.getItem("token"),
+		movie_name: movie_name
+	};
+	let response = await server_query("/search_new_movie", "POST", payload);
+
+	if (response.status != response_status.SUCESS) {
+		modal.set_title("Error");
+		modal.set_body(response.log);
+		modal.show();
+		return;
+	}
+
+	// Creating thumbnails for movie selector pannel
+	let movies = response.ext[0];
+	for (let movie_id in movies) {
+		let movie = movies[movie_id]
+
+		let pannel = document.createElement("div");
+		pannel.setAttribute("id", movie_id);
+		pannel.setAttribute("class","show")
+
+		let thumbnail = document.createElement("img");
+		thumbnail.setAttribute("class", "thumbnail");
+		thumbnail.src = movie["poster_url"];
+
+		let title = document.createElement("p");
+		title.setAttribute("class","title");
+		title.innerHTML = movie["title"];
+
+		pannel.appendChild(thumbnail);
+		pannel.appendChild(title);
+		movie_selector_body.appendChild(pannel);
+
+		add_event_listener(pannel, movies);
+	}
+});
+
+window.onload = async () => {
+	let response = await server_query("/get_video_list?uploaded=False", "GET", {});
+	if (response.status == response_status.FAILED) {
+		modal.set_title("Error");
+		modal.set_body(response.log);
+		modal.show();
+		return;
+	}
+
+	let videos = response.ext[0]
+	for (let video_id in videos) {
+		let video = videos[video_id];
+
+		let pannel = document.createElement("div");
+		pannel.setAttribute("id", video_id);
+		pannel.setAttribute("class","show")
+
+		let thumbnail = document.createElement("img");
+		thumbnail.setAttribute("class", "thumbnail");
+		thumbnail.src = video.poster_url;
+
+		let title = document.createElement("p");
+		title.setAttribute("class","title");
+		title.innerHTML = video.title;
+
+		pannel.appendChild(thumbnail);
+		pannel.appendChild(title);
+		movie_grid.appendChild(pannel);
+	}
+}
