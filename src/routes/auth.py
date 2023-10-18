@@ -29,6 +29,7 @@ def auth_token(func):
 		except jwt.exceptions.ExpiredSignatureError as e:
 			return MResponse(TOKEN_EXIPRED, "Token has been expired.", []).as_json()
 		except Exception as e:
+			print(e)
 			return MResponse(FAILED, "Token is invalid", []).as_json()
 
 	return decorated

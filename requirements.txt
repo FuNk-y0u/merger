@@ -8,3 +8,7 @@ python-dotenv
 pyjwt
 psycopg2
 psycopg2-binary
+bs4
+requests
+python-qbittorrent
+bencode.py

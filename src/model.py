@@ -26,5 +26,8 @@ class User(pdb.Model, UserMixin):
 
 
 class Movie(pdb.Model, UserMixin):
-	id    = pdb.Column(pdb.String(128), primary_key=True)
-	title = pdb.Column(pdb.String(100))
+	id         = pdb.Column(pdb.String(128), primary_key=True)
+	title      = pdb.Column(pdb.String())
+	poster_url = pdb.Column(pdb.String())
+	video_url  = pdb.Column(pdb.String())
+	uploaded   = pdb.Column(pdb.Boolean, default = False)
