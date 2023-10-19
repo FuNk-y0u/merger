@@ -55,17 +55,15 @@ class MergerDB:
 		# Creating new movie object
 		id = str(uuid.uuid4())
 		new_movie = Movie(
-			id         = id,
-			title      = payload["title"],
-			poster_url = payload["poster_url"],
-			uploaded   = False
+			id          = id,
+			title       = payload["title"],
+			poster_url  = payload["poster_url"],
+			torrent_url = payload["torrent_url"],
+			uploaded    = False
 		)
 
 		pdb.session.add(new_movie)
 		pdb.session.commit()
-
-		# Starting the torrent downloader
-		self.scrapper.download_movie(payload)
 
 		return MResponse(
 			SUCESS,

@@ -1,6 +1,4 @@
 from src.inc import *
-from src.mergerdb.torrent_cli import TorrentCLI
-
 
 class Scrapper:
 	def __init__(self):
@@ -8,12 +6,6 @@ class Scrapper:
 
 		#NOTE: ':' is removed
 		self.not_allowed = ["\\","/",'"',"<",">","|"]
-
-		self.torrent_cli = TorrentCLI(
-			os.getenv("TORRENT_DEV_URL"),
-			os.getenv("TORRENT_USERNAME"),
-			os.getenv("TORRENT_PASSWORD")
-		)
 
 	def scrape(self, movie_name: str) -> list[dict]:
 		movies = {}
@@ -86,11 +78,3 @@ class Scrapper:
 			"torrent_url": torrent_url
 		}
 
-	def download_movie(self, movie: dict):
-		torrent_filename = f"{movie['title']}.torrent"
-
-		# Downloading torrent file
-		torrent_file = requests.get(movie["torrent_url"], allow_redirects = True)
-		open(torrent_filename, "wb").write(torrent_file.content)
-
-		self.torrent_cli.download_from_file(torrent_filename)
