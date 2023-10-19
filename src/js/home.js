@@ -35,6 +35,8 @@ function add_event_listener(element, movies) {
 }
 
 window.onload = async () => {
+	movie_grid.innerHTML = "";
+
 	let response = await server_query("/get_video_list?uploaded=True", "GET", {});
 	if (response.status == response_status.FAILED) {
 		modal.set_title("Error");

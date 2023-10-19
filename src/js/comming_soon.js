@@ -36,6 +36,8 @@ function add_event_listener(element, movies) {
 		}
 		modal.set_body(response.log);
 		modal.show();
+
+		await show_movies();
 	});
 }
 
@@ -94,7 +96,13 @@ add_movie.addEventListener("click", async () => {
 	}
 });
 
-window.onload = async () => {
+/*
+ * Queries the backend for comming soon movies and displays them in grid.
+ */
+
+async function show_movies() {
+	movie_grid.innerHTML = "";
+
 	let response = await server_query("/get_video_list?uploaded=False", "GET", {});
 	if (response.status == response_status.FAILED) {
 		modal.set_title("Error");
@@ -124,3 +132,5 @@ window.onload = async () => {
 		movie_grid.appendChild(pannel);
 	}
 }
+
+window.onload = show_movies;
