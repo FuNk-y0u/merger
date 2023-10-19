@@ -1,7 +1,9 @@
 from inc import *
-from torrent_cli import TorrentCLI
 from log import *
 from defines import *
+
+from torrent_cli import TorrentCLI
+from scrapper    import Scrapper
 
 
 class MergerDB:
@@ -11,6 +13,11 @@ class MergerDB:
 			os.getenv("TORRENT_DEV_URL"),
 			os.getenv("TORRENT_USERNAME"),
 			os.getenv("TORRENT_PASSWORD")
+		)
+
+		self.scrapper = Scrapper(
+			os.getenv("FILEMOON_USERNAME"),
+			os.getenv("FILEMOON_PASSWORD")
 		)
 
 		with self.app.app_context():

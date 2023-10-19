@@ -7,6 +7,8 @@ from dotenv    import load_dotenv
 from io        import StringIO
 
 from qbittorrent import Client
+from bs4         import BeautifulSoup
+from bs4.element import Tag
 
 import hashlib
 import bencode
