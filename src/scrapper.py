@@ -58,8 +58,6 @@ class Scrapper:
 			f"{self.url}videos",
 			cookies = self.cookies
 		)
-
-		open("test.html", "w").write(res.text)
 		return res.text
 
 	def __extract_id_from_rows(self, file_name: str, rows: list[Tag]) -> str:
