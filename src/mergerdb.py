@@ -104,7 +104,10 @@ class MergerDB:
 
 					if movie_info.torr_hash in completed:
 						movie_info.status = MovieStatus.COMPLETED
-						self.__handle_completed_movies(movie_info)
+						self.__handle_completed_movies(
+							movie_info,
+							completed[movie_info.torr_hash]
+						)
 
 			# time.sleep(5 * 60)
 
@@ -139,8 +142,8 @@ class MergerDB:
 		open(file_path, "wb").write(torr_file.content)
 		return self.torr_cli.get_file_hash(file_path)
 
-	def __handle_completed_movies(self, movie_info: MovieInfo):
-		log_sucess(f"Downloaded movie - id: {movie_info.id}")
+	def __handle_completed_movies(self, movie_info: MovieInfo, movie_path: str):
+		log_sucess(f"Downloaded movie - id: {movie_info.id} to '{movie_path}'")
 
 		# Deleting torr file
 		torr_file = f"{self.TORR_FILE_PATH}/{movie_info.id}.torrent"

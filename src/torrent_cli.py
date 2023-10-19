@@ -18,12 +18,12 @@ class TorrentCLI:
 		file = open(file_path, "rb")
 		self.qb.download_from_file(file)
 
-	def get_completed_list(self) -> list:
-		completed = []
+	def get_completed_list(self) -> dict:
+		completed = {}
 
 		torrents = self.qb.torrents(filter = "completed")
 		for torr in torrents:
-			completed.append(torr["hash"])
+			completed.update({ torr["hash"]: torr["save_path"] })
 
 		return completed
 
