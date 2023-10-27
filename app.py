@@ -37,7 +37,7 @@ app.add_url_rule("/lobby_get_host_state", view_func=lobby_get_host_state, method
 app.add_url_rule("/lobby_get", view_func=lobby_get, methods=["POST"])
 
 # Video system
-app.add_url_rule("/get_video", view_func=get_video, methods=["GET"])
+app.add_url_rule("/get_video", view_func=get_video, methods=["POST"])
 app.add_url_rule("/get_video_list", view_func=get_video_list, methods=["GET"])
 
 # Database system
