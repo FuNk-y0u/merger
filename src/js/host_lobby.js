@@ -2,12 +2,12 @@ import {
 	server_ip,
 	server_query,
 	response_status,
-	redirect
+	redirect,
 } from "./util.js";
 import { Modal } from "./modal.js"
+import { extract_m3u8_pl } from "./extractor.js"
 
 const url_params = new URLSearchParams(window.location.search);
-const video = document.getElementById("player");
 
 const modal_root = document.getElementById("modal_root");
 const modal = new Modal(modal_root);
@@ -17,7 +17,6 @@ const modal = new Modal(modal_root);
  */
 
 const return_button = document.getElementById("return");
-
 return_button.addEventListener("click", async () => {
 	let token    = localStorage.getItem("token");
 	let user_id  = localStorage.getItem("user_id");
@@ -38,12 +37,12 @@ return_button.addEventListener("click", async () => {
 	alert(response.log);
 });
 
+
 /*
  * Clipboard system
  */
 
 const button = document.getElementById("copy_clipboard");
-
 button.addEventListener("click", async () => {
 	var copyText = document.getElementById("lobby_id").innerHTML;
 	navigator.clipboard.writeText(copyText);
@@ -52,11 +51,11 @@ button.addEventListener("click", async () => {
 	modal.show();
 });
 
+
 /*
  * Querying backend to create a lobby.
  */
-
-async function create_lobby(movie_id) {
+const create_lobby = async (movie_id) => {
 	let payload = {
 		token: localStorage.getItem("token"),
 		admin_id: localStorage.getItem("user_id")
@@ -91,7 +90,7 @@ async function create_lobby(movie_id) {
  * Queries the backend to update the host state
  */
 
-async function sync_player(player, lobby_id) {
+const sync_player = async (player, lobby_id) => {
 	let host_state = {
 		token    : localStorage.getItem("token"),
 		lobby_id : lobby_id,
@@ -120,13 +119,30 @@ window.onload = async () => {
 	let lobby_id_label = document.getElementById("lobby_id");
 	lobby_id_label.innerHTML = lobby.id;
 
-	// Adding the movie link to player
-	let source = document.createElement("source");
-	source.src = `${server_ip}/get_video?id=${id}`;
-	source.type = "video/webm";
-	video.appendChild(source);
+	let res = await server_query("/get_video", "POST", { video_id: id });
+	if (res.status != response_status.SUCESS) {
+		alert(res.log);
+		redirect("../html/home.html");
+		return;
+	}
+	let url = res.ext[0]
+
+	const video = document.getElementById("player");
+	const player = new Plyr('#player');
+
+	let source = await extract_m3u8_pl(url);
+	console.log(source);
+
+	if (!Hls.isSupported()) {
+		video.src = source;
+	} else {
+		const hls = new Hls();
+		hls.loadSource(source);
+		hls.attachMedia(video);
+		window.hls = hls;
+	}
+	window.player = player;
 
 	// Sending host_state
-	const player = new Plyr('#player');
 	sync_player(player, lobby.id);
 }

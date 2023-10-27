@@ -5,9 +5,9 @@ import {
 	redirect
 } from "./util.js";
 import { Modal } from "./modal.js"
+import { extract_m3u8_pl } from "./extractor.js"
 
 const url_params = new URLSearchParams(window.location.search);
-const video = document.getElementById("player");
 
 const modal_root = document.getElementById("modal_root");
 const modal = new Modal(modal_root);
@@ -113,12 +113,20 @@ window.onload = async () => {
 	}
 
 	// Adding the movie link to player
-	let source = document.createElement("source");
-	source.src = `${server_ip}/get_video?id=${lobby.movie_id}`;
-	source.type = "video/webm";
-	video.appendChild(source);
+	//let source = document.createElement("source");
+	//source.src = `${server_ip}/get_video?id=${lobby.movie_id}`;
+	//source.type = "video/webm";
+	//video.appendChild(source);
 
-	// Syncronizing player
+	let res = await server_query("/get_video", "POST", { video_id: lobby.movie_id});
+	if (res.status != response_status.SUCESS) {
+		alert(res.log);
+		redirect("../html/home.html");
+		return;
+	}
+	let url = res.ext[0]
+
+	const video = document.getElementById("player");
 	const player = new Plyr('#player', {
 		listeners: {
 			seek: function (e) {
@@ -127,6 +135,18 @@ window.onload = async () => {
 			}
 		}
 	});
+
+	let source = await extract_m3u8_pl(url);
+
+	if (!Hls.isSupported()) {
+		video.src = source;
+	} else {
+		const hls = new Hls();
+		hls.loadSource(source);
+		hls.attachMedia(video);
+		window.hls = hls;
+	}
+	window.player = player;
 
 	sync_player(player, lobby.id);
 }
