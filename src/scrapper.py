@@ -76,6 +76,9 @@ class Scrapper:
 			body = table.find("tbody")
 			tds = body.find_all("td")
 			id = self.__extract_id_from_rows(file_name, tds)
+
+			if not id: return id
+
 			url = f"{self.url}e/{id}"
 			return url
 

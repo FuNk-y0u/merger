@@ -4,6 +4,7 @@ from defines import *
 
 from torrent_cli import TorrentCLI
 from scrapper    import Scrapper
+from ftp_cli     import FileMoonFTP
 
 
 class MergerDB:
@@ -20,14 +21,21 @@ class MergerDB:
 			os.getenv("FILEMOON_PASSWORD")
 		)
 
+		self.fftp = FileMoonFTP(
+			os.getenv("FTP_USER"),
+			os.getenv("FTP_PASSWORD"),
+			os.getenv("FTP_SERVER")
+		)
+		self.fftp.login()
+
 		with self.app.app_context():
 			pdb.init_app(self.app)
 
 		self.movie_queue: dict[str, MovieInfo] = {}
 		self.running = True
 
-		self.MAX_TORR_POOL      = int(os.getenv("MAX_TORR_POOL"))
-		self.TORR_FILE_PATH     = os.getenv("TORR_FILE_PATH")
+		self.MAX_TORR_POOL  = int(os.getenv("MAX_TORR_POOL"))
+		self.TORR_FILE_PATH = os.getenv("TORR_FILE_PATH")
 
 		# TORR Dir
 		if not os.path.exists(self.TORR_FILE_PATH):
@@ -68,7 +76,7 @@ class MergerDB:
 				log_info(f"Added movie to the queue - id: {movie_id}")
 
 	def __download_torr_file(self, file_path: str, torrent_url: str) -> str:
-		log_info(f"Downloading TORR: {file_path}")
+		log_info(f"Downloading TORR: {file_path} from: {torrent_url}")
 		torr_file = requests.get(torrent_url, allow_redirects = True)
 
 		open(file_path, "wb").write(torr_file.content)
@@ -84,30 +92,84 @@ class MergerDB:
 		# Remove from queue
 		self.movie_queue.pop(movie_info.id)
 
-		# TODO: Call to FTP client
+		# Finding the filename
+		contents = os.listdir(movie_path)
+		file_name = ""
+		for file in contents:
+			if file.endswith(".mp4"): file_name = file
 
-	def __handle_stalled_movie(self, movie_info: MovieInfo):
+		if not file_name:
+			log_error(f"Cannot find the mp4 file for - id: {movie_info.id}")
+			return False
+
+		# Changing the filename
+		file_path = f"{movie_path}/{file_name}"
+		new_path  = f"{movie_path}/{movie_info.id}.mp4"
+
+		os.rename(file_path, new_path)
+
+		# Pusing the movie into filemoon server
+		res = self.fftp.store_file(new_path)
+		if not res:
+			log_error(f"FTP CLI failed to push {movie_path} to cloud.")
+			return False
+
+		log_sucess(f"Sucessfully uploaded to filemoon via FTP - id: {movie_info.id}")
+		log_info("Waiting for 5 min to fully be available in filemoon...")
+
+		# Wait to fully upload to filemoon
+		time.sleep(5 * 60)
+
+		# Scrapping filemoon for short embeded url
+		url = self.scrapper.scrape_url(movie_info.id)
+		if not url:
+			log_error(f"Cannot find the video url for {movie_info.id}")
+			return False
+
+		# Update the database
+		log_info(f"Updating database with video url - id: {movie_info.id} & url: {url}")
+
+		with self.app.app_context():
+			movie = Movie.query.filter_by(id = movie_info.id).first()
+			movie.video_url = url
+			movie.uploaded = True
+
+			pdb.session.add(movie)
+			pdb.session.commit()
+
+		log_sucess(f"Sucessfully uploaded movie to cloud - id: {movie_info.id}")
+
+		return True
+
+	def __handle_stalled_movie(self, movie_info: MovieInfo) -> bool:
 		file_path = f"{self.TORR_FILE_PATH}/{movie_info.id}.torrent"
 
-		movie_info.torr_hash = self.__download_torr_file(
+		hash = self.__download_torr_file(
 			file_path,
 			movie_info.url
 		)
-		self.torr_cli.download_from_file(file_path)
+		if not hash: return False
+
+		movie_info.torr_hash = hash
+
+		res = self.torr_cli.download_from_file(file_path, movie_info.id)
+		if not res: return False
 
 		movie_info.status = MovieStatus.DOWNLOADING
+		return True
 
-	def __handle_downloading_movie(self, movie_info: MovieInfo):
+	def __handle_downloading_movie(self, movie_info: MovieInfo) -> bool:
 		completed = self.torr_cli.get_completed_list()
 
-		if not movie_info.torr_hash: return
+		if not movie_info.torr_hash: return False
 
 		if movie_info.torr_hash in completed:
 			movie_info.status = MovieStatus.COMPLETED
-			self.__handle_completed_movie(
+			return self.__handle_completed_movie(
 				movie_info,
 				completed[movie_info.torr_hash]
 			)
+		return True
 
 	def __queue_thread(self):
 		while self.running:
@@ -118,8 +180,14 @@ class MergerDB:
 				movie_info = self.movie_queue[movie_id]
 
 				if movie_info.status == MovieStatus.STALLED:
-					self.__handle_stalled_movie(movie_info)
-				elif movie_info.status == MovieStatus.DOWNLOADING:
-					self.__handle_downloading_movie(movie_info)
+					res = self.__handle_stalled_movie(movie_info)
+					if not res:
+						log_error(f"Failed downloading movie - id: {movie_id}")
+						self.movie_queue.pop(movie_id)
 
-			# time.sleep(5 * 60)
+				elif movie_info.status == MovieStatus.DOWNLOADING:
+					res = self.__handle_downloading_movie(movie_info)
+					if not res:
+						log_error(f"Failed downloading movie - id: {movie_id}")
+						self.movie_queue.pop(movie_id)
+

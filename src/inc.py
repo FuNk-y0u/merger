@@ -9,6 +9,8 @@ from io        import StringIO
 from qbittorrent import Client
 from bs4         import BeautifulSoup
 from bs4.element import Tag
+from ftplib      import FTP
+from tqdm        import tqdm
 
 import hashlib
 import bencode

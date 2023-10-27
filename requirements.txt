@@ -8,3 +8,5 @@ psycopg2
 psycopg2-binary
 python-qbittorrent
 bencode.py
+bs4
+tqdm

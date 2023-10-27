@@ -19,7 +19,6 @@ def log_sucess(msg):
 
 def log_error(msg):
 	print(f"{Colors.RED}[ERROR]: {Colors.DEFAULT}{msg}")
-	exit(1)
 
 def log_warning(msg):
 	print(f"{Colors.YELLOW}[WARNING]: {Colors.DEFAULT}{msg}")
