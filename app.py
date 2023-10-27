@@ -16,7 +16,7 @@ CORS(app)
 load_dotenv()
 
 # Initializing database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DEV_DB_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL")
 mergerdb = MergerDB(app)
 
 # Global app states
