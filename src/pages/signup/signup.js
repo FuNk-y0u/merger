@@ -2,14 +2,31 @@ import {
 	server_ip,
 	server_query,
 	response_status,
-	redirect
-} from "./util.js";
-import { Modal } from "./modal.js"
+	redirect_page,
+	loose_redirect
+} from "./../../utils/utils.js";
+import { Modal } from "./../../utils/modal.js"
+
+const modal = new Modal(
+	document.getElementById("modal_root")
+);
+
+
+/*
+ * Login page redirection
+ */
+
+const anchor = document.getElementById("login");
+anchor.addEventListener("click", async () => {
+	loose_redirect("login");
+});
+
+
+/*
+ * Signup system
+ */
 
 const button = document.getElementById("signup_button");
-const modal_root = document.getElementById("modal_root");
-const modal = new Modal(modal_root);
-
 button.addEventListener("click", async () => {
 	let username = document.getElementById("username").value;
 	let email    = document.getElementById("email").value;
@@ -60,5 +77,5 @@ button.addEventListener("click", async () => {
 	localStorage.setItem("token", token);
 
 	// Redirect
-	redirect("../html/loading.html");
+	redirect_page("loading");
 });

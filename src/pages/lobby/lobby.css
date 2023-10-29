@@ -1,0 +1,12 @@
+#frame{
+	display: flex;
+	width: 60%;
+	height: 30%;
+	padding: 5%;
+	justify-content: center;
+}
+.copy_button{
+	background-color: rgb(48, 158, 255);
+	border-radius: 5px;
+	border: 0;
+}

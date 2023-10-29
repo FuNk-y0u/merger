@@ -2,24 +2,34 @@ import {
 	server_ip,
 	server_query,
 	response_status,
-	redirect
-} from "./util.js";
-import { Modal } from "./modal.js"
+	redirect_page
+} from "./../../utils/utils.js";
+import { Modal } from "./../../utils/modal.js"
 
-const movie_grid = document.getElementById("movie_grid");
-const modal_root = document.getElementById("modal_root");
 
-const modal = new Modal(modal_root);
+const modal = new Modal(
+	document.getElementById("modal_root")
+);
 const movie_selector_modal = new bootstrap.Modal(
 	document.getElementById("movie_selection_modal")
 );
-const movie_selector_body = document.getElementById("movie_selector_body");
+
+
+/*
+ * Return button
+ */
+
+const return_button = document.getElementById("return");
+return_button.addEventListener("click", () => {
+	redirect_page("home");
+});
+
 
 /*
  * Queries the backend to save the selected movie to the comming soon page.
  */
 
-function add_event_listener(element, movies) {
+const add_event_listener = (element, movies) => {
 	element.addEventListener("click", async () => {
 		let id = element.id;
 		let payload = movies[element.id];
@@ -37,9 +47,33 @@ function add_event_listener(element, movies) {
 		modal.set_body(response.log);
 		modal.show();
 
-		await show_movies();
+		await render_video_cards();
 	});
 }
+
+
+/*
+ * Generates video card ui
+ */
+
+const create_video_card = (video_id, video) => {
+	const video_card = document.createElement("div");
+	video_card.setAttribute("id", video_id);
+	video_card.setAttribute("class", "show")
+
+	const thumbnail = document.createElement("img");
+	thumbnail.setAttribute("class", "thumbnail");
+	thumbnail.src = video.poster_url;
+
+	const title = document.createElement("p");
+	title.setAttribute("class","title");
+	title.innerHTML = video.title;
+
+	video_card.appendChild(thumbnail);
+	video_card.appendChild(title);
+	return video_card;
+}
+
 
 /*
  * Queries backend with movie name and displays the closest results
@@ -47,6 +81,7 @@ function add_event_listener(element, movies) {
 
 const add_movie_button = document.getElementById("add_movie");
 add_movie.addEventListener("click", async () => {
+	const movie_selector_body = document.getElementById("movie_selector_body");
 	movie_selector_body.innerHTML = ""
 
 	let movie_name = document.getElementById("movie_name").value;
@@ -74,33 +109,20 @@ add_movie.addEventListener("click", async () => {
 	// Creating thumbnails for movie selector pannel
 	let movies = response.ext[0];
 	for (let movie_id in movies) {
-		let movie = movies[movie_id]
+		const video_card = create_video_card(movie_id, movies[movie_id]);
+		movie_selector_body.appendChild(video_card);
 
-		let pannel = document.createElement("div");
-		pannel.setAttribute("id", movie_id);
-		pannel.setAttribute("class","show")
-
-		let thumbnail = document.createElement("img");
-		thumbnail.setAttribute("class", "thumbnail");
-		thumbnail.src = movie["poster_url"];
-
-		let title = document.createElement("p");
-		title.setAttribute("class","title");
-		title.innerHTML = movie["title"];
-
-		pannel.appendChild(thumbnail);
-		pannel.appendChild(title);
-		movie_selector_body.appendChild(pannel);
-
-		add_event_listener(pannel, movies);
+		add_event_listener(video_card, movies);
 	}
 });
+
 
 /*
  * Queries the backend for comming soon movies and displays them in grid.
  */
 
-async function show_movies() {
+const render_video_cards = async () => {
+	const movie_grid = document.getElementById("movie_grid");
 	movie_grid.innerHTML = "";
 
 	let response = await server_query("/get_video_list?uploaded=False", "GET", {});
@@ -114,23 +136,9 @@ async function show_movies() {
 	let videos = response.ext[0]
 	for (let video_id in videos) {
 		let video = videos[video_id];
-
-		let pannel = document.createElement("div");
-		pannel.setAttribute("id", video_id);
-		pannel.setAttribute("class","show")
-
-		let thumbnail = document.createElement("img");
-		thumbnail.setAttribute("class", "thumbnail");
-		thumbnail.src = video.poster_url;
-
-		let title = document.createElement("p");
-		title.setAttribute("class","title");
-		title.innerHTML = video.title;
-
-		pannel.appendChild(thumbnail);
-		pannel.appendChild(title);
-		movie_grid.appendChild(pannel);
+		const video_card = create_video_card(video_id, videos[video_id]);
+		movie_grid.appendChild(video_card);
 	}
 }
 
-window.onload = show_movies;
+window.onload = render_video_cards;

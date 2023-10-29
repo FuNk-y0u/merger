@@ -7,8 +7,11 @@ const response_status = {
 };
 
 //const server_ip = "https://merger-dev-mngs.2.sg-1.fl0.io";
-const server_ip = "http://localhost:8080";
+const server_ip = "https://merger-dev-pfqf.2.sg-1.fl0.io";
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+//TODO: Rewrite server query
 const server_query = async (endpoint, method, payload) => {
 	let params = {
 		method: method,
@@ -44,21 +47,30 @@ const auth = async () => {
 	return response;
 }
 
-const redirect = async (path) => {
+const loose_redirect = async (page_name, params = null) => {
+	let root_path = localStorage.getItem("root_path");
+
+	let url = `${root_path}/pages/${page_name}/${page_name}.html`;
+	if (params) url += "?" + params;
+
+	window.location.href = url;
+}
+
+const redirect_page = async (page_name, params = null) => {
 	let res = await auth();
 	if (res.status != response_status.SUCESS) {
-		// TODO: Show some error
-		alert("Failed to authenticate");
+		alert(res.log);
 		return;
 	}
-
-	window.location.href = path;
+	await loose_redirect(page_name, params);
 }
 
 export {
 	server_ip,
+	sleep,
 	server_query,
 	response_status,
 	auth,
-	redirect
+	loose_redirect,
+	redirect_page
 }
