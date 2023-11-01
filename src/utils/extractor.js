@@ -59,6 +59,19 @@ const get_post_data_from_jquery = (jquery) => {
 	}
 }
 
+const get_url_raw = (jquery) => {
+	jquery = jquery.replaceAll(";", ";\n");
+	let lines = jquery.split("\n");
+
+	for (let i in lines) {
+		let line = lines[i];
+		if (line.includes("file:")) {
+			let url = line.split("\"")[1];
+			return url;
+		}
+	}
+}
+
 const get_file_info = async (post_data) => {
 	let payload = json_to_xform(post_data);
 	let params = {
@@ -102,13 +115,19 @@ const get_pl_url = (file_info) => {
 }
 
 const extract_m3u8_pl = async (url) => {
+	let m3u8_url = "";
+
 	let html = await get_html(url);
 	let script = get_script_from_html(html);
 	let jquery = eval(script.replace("eval", ""));
 	let post_data = get_post_data_from_jquery(jquery);
-	let file_info = await get_file_info(post_data);
-	url = get_pl_url(file_info);
-	return url;
+	if (post_data) {
+		let file_info = await get_file_info(post_data);
+		m3u8_url = get_pl_url(file_info);
+	} else {
+		m3u8_url = get_url_raw(jquery);
+	}
+	return m3u8_url;
 }
 
 export {
