@@ -13,6 +13,7 @@ class Scrapper:
 
 		for link in movie_links:
 			movie = self.scrape_movie(link)
+			print(movie)
 			if movie["title"] and movie["poster_url"] and movie["torrent_url"]:
 				movies.update({
 					str(uuid.uuid4()): {
@@ -59,11 +60,13 @@ class Scrapper:
 				return None
 
 		def __get_torrent_url(soup: BeautifulSoup, title: str) -> str:
-			try:
-				download_title = f"Download {title} 720p.WEB Torrent"
-				return soup.find(title = download_title)["href"]
-			except:
-				return None
+			fmts = ["WEB", "BluRay"]
+			for fmt in fmts:
+				download_title = f"Download {title} 720p.{fmt} Torrent"
+				anchor = soup.find(title = download_title)
+				if anchor: return anchor["href"]
+
+			return None
 
 		response = requests.get(movie_link)
 		soup = BeautifulSoup(response.text, "html.parser")
