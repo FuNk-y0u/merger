@@ -11,7 +11,7 @@ class MergerDB:
 	def __init__(self, app: Flask):
 		self.app = app
 		self.torr_cli = TorrentCLI(
-			os.getenv("TORRENT_DEV_URL"),
+			os.getenv("TORRENT_URL"),
 			os.getenv("TORRENT_USERNAME"),
 			os.getenv("TORRENT_PASSWORD")
 		)
@@ -28,18 +28,21 @@ class MergerDB:
 		)
 		self.fftp.login()
 
-		with self.app.app_context():
-			pdb.init_app(self.app)
+		self.MAX_TORR_POOL   = int(os.getenv("MAX_TORR_POOL"))
+		self.DB_UPDATE_TIME  = int(os.getenv("DB_UPDATE_TIME"))
+		self.FTP_UPDATE_TIME = int(os.getenv("FTP_UPDATE_TIME"))
+		self.TORR_FILE_PATH  = os.getenv("TORR_FILE_PATH")
 
 		self.movie_queue: dict[str, MovieInfo] = {}
 		self.running = True
 
-		self.MAX_TORR_POOL  = int(os.getenv("MAX_TORR_POOL"))
-		self.TORR_FILE_PATH = os.getenv("TORR_FILE_PATH")
-
 		# TORR Dir
 		if not os.path.exists(self.TORR_FILE_PATH):
 			os.mkdir(self.TORR_FILE_PATH)
+
+		# DB initialization
+		with self.app.app_context():
+			pdb.init_app(self.app)
 
 	def run(self):
 		log_info("Starting queue thread...")
@@ -49,7 +52,7 @@ class MergerDB:
 		while self.running:
 			movies = self.__get_unuploaded_movies()
 			self.__append_to_movie_queue(movies)
-			time.sleep(5 * 60)
+			time.sleep(self.DB_UPDATE_TIME)
 
 	def __get_unuploaded_movies(self) -> dict[str, MovieInfo]:
 		movies: dict[str, MovieInfo] = {}
@@ -89,9 +92,6 @@ class MergerDB:
 		torr_file = f"{self.TORR_FILE_PATH}/{movie_info.id}.torrent"
 		os.remove(torr_file)
 
-		# Remove from queue
-		self.movie_queue.pop(movie_info.id)
-
 		# Finding the filename
 		contents = os.listdir(movie_path)
 		file_name = ""
@@ -118,7 +118,7 @@ class MergerDB:
 		log_info("Waiting for 5 min to fully be available in filemoon...")
 
 		# Wait to fully upload to filemoon
-		time.sleep(5 * 60)
+		time.sleep(self.FTP_UPDATE_TIME)
 
 		# Scrapping filemoon for short embeded url
 		url = self.scrapper.scrape_url(movie_info.id)
@@ -137,8 +137,11 @@ class MergerDB:
 			pdb.session.add(movie)
 			pdb.session.commit()
 
-		log_sucess(f"Sucessfully uploaded movie to cloud - id: {movie_info.id}")
+		# Remove from queue
+		self.movie_queue.pop(movie_info.id)
+		log_sucess(f"Removed - id: {movie_info.id} from queue")
 
+		log_sucess(f"Sucessfully uploaded movie to cloud - id: {movie_info.id}")
 		return True
 
 	def __handle_stalled_movie(self, movie_info: MovieInfo) -> bool:
@@ -173,7 +176,6 @@ class MergerDB:
 
 	def __queue_thread(self):
 		while self.running:
-			# NOTE: Getting 5 movies at a time
 			movie_ids = list(self.movie_queue.keys())[:self.MAX_TORR_POOL]
 
 			for movie_id in movie_ids:
