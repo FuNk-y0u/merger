@@ -12,23 +12,10 @@ app
 			"minHeight": 480,
 			"minWidth": 854,
 			webPreferences: {
-				nodeIntegration: true
+				nodeIntegration: true,
+				contextIsolation: false
 			},
 		});
 	
 		window.loadFile(`src/index.html`);
-	
-		let app_path = "file://" + app.getAppPath() + "/src";
-	
-		window.webContents
-			.executeJavaScript(`localStorage.clear();`, true)
-			.catch(error => {
-				console.log(error);
-			});
-	
-		window.webContents
-			.executeJavaScript(`localStorage.setItem("root_path", "${app_path}");`, true)
-			.catch(error => {
-				console.log(error);
-			});
 	});

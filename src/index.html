@@ -3,6 +3,7 @@
 	<script type = "module">
 		import { loose_redirect } from "./utils/utils.js"
 		window.onload = async () => {
+			localStorage.setItem("root_path", __dirname);
 			await loose_redirect("login");
 		}
 	</script>
