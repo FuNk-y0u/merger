@@ -30,7 +30,8 @@ class Player {
 	}
 
 	create_plyr_player(player_id, host) {
-		let params = {};
+		let params = {
+		};
 		if (!host) {
 			params = {
 				listeners: {

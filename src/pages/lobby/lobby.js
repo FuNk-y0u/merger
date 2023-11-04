@@ -5,6 +5,7 @@ import {
 	redirect_page,
 } from "./../../utils/utils.js";
 import { Modal } from "./../../utils/modal.js"
+
 import {
 	join_lobby,
 	create_lobby
@@ -15,7 +16,6 @@ import { Player } from "./player.js"
 const modal = new Modal(
 	document.getElementById("modal_root")
 );
-
 
 /*
  * Extracts parameters from url
