@@ -29,5 +29,8 @@
   "devDependencies": {
     "electron": "^26.4.2",
     "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "events": "^3.3.0"
   }
 }
