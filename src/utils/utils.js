@@ -25,10 +25,23 @@ const server_query = async (endpoint, method, payload) => {
 		params.body = JSON.stringify(payload);
 	}
 
-	const request = await fetch(server_ip + endpoint, params);
-	let result = await request.text();
-	let data = JSON.parse(result);
-	return data;
+	return await fetch(server_ip + endpoint, params)
+	.then(async (response) => {
+		console.log(response);
+		if (response.ok) {
+			let result = await response.text();
+			let data = JSON.parse(result);
+			return data;
+		}
+		throw new Error("Failed to fetch.");
+	})
+	.catch((error) => {
+		return {
+			log: error,
+			status: response_status.FAILED,
+			ext: []
+		};
+	});
 }
 
 const auth = async () => {
