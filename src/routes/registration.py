@@ -87,3 +87,10 @@ def login() -> Response:
 		f"Sucessfully logged in as `{query.username}`.",
 		[{"token": jwt_token}]
 	).as_json()
+
+def connection_check() -> Response:
+	return MResponse(
+		SUCESS,
+		f"server connection sucessfull",
+		[{}]
+	).as_json()

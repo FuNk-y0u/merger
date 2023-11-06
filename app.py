@@ -22,6 +22,9 @@ mergerdb = MergerDB(app)
 # Global app states
 app.config[M_LOBBIES] = {}
 
+# Server connection check endpoint
+app.add_url_rule("/connect", view_func=connection_check, methods=["GET"])
+
 # Registration endpoints
 app.add_url_rule("/auth", view_func=auth, methods=["POST"])
 app.add_url_rule("/signup", view_func=signup, methods=["POST"])
