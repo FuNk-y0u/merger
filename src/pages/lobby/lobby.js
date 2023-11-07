@@ -127,7 +127,10 @@ const render_lobby = async () => {
 		return;
 	}
 
-	let player = new Player("player", params.host, url);
+	let player = new Player("player", params.host, url, () => {
+		document.getElementById("media_loading").style.display = 'none';
+		document.getElementById("frame").style.display = 'flex';
+	});
 	player.init(() => {
 		player.sync(lobby.id);
 	});

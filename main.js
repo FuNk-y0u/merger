@@ -16,7 +16,7 @@ function createWindow () {
 	})
 
 	// disables menu
-	window.setMenu(null);
+	//window.setMenu(null);
 
 	window.loadFile(`src/pages/connect_loading/loading.html`);
 	loadingEvent.on(`success`, () => {

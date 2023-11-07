@@ -7,18 +7,22 @@ import {
 import { extract_m3u8_pl } from "./../../utils/extractor.js"
 
 class Player {
-	constructor(player_id, host, url) {
+	constructor(player_id, host, url, callback) {
 		this.host = host;
 		this.url = url;
 
 		this.video = document.getElementById(player_id);
 		this.player = this.create_plyr_player(player_id, host);
+		this.player.on("canplay", () => {
+			callback();
+		})
 	}
 
 	async init(callback) {
 		const source = await extract_m3u8_pl(this.url);
 		this.attach_hls(source);
 		callback.bind(this)();
+		
 	}
 
 	sync(lobby_id) {
@@ -31,6 +35,7 @@ class Player {
 
 	create_plyr_player(player_id, host) {
 		let params = {
+			controls: ['play-large', 'play', 'progress', 'current-time', 'captions', 'fullscreen', 'settings']
 		};
 		if (!host) {
 			params = {
