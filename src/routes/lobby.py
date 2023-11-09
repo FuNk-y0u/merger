@@ -28,7 +28,6 @@ def lobby_create() -> Response:
 		).as_json()
 
 	new_lobby = Lobby(admin_id)
-	new_lobby.members.append(query.username)
 
 	current_app.config[M_LOBBIES].update({new_lobby.id: new_lobby})
 
@@ -111,7 +110,7 @@ def lobby_join() -> Response:
 			[]
 		).as_json()
 
-	lobby.members.append(query.username)
+	lobby.members.append(user_id)
 
 	return MResponse(
 		SUCESS,
@@ -282,4 +281,37 @@ def lobby_get() -> Response:
 		SUCESS,
 		"Sucessfully fetched host state of lobby",
 		[ lobby.as_dict() ]
+	).as_json()
+
+
+@auth_token
+def lobby_get_members() -> Response:
+	payload = request.get_json()
+
+	if not verify_key(["lobby_id"], payload):
+		return MResponse(
+			FAILED,
+			"`lobby_id` are the required payload fields.",
+			[]
+		).as_json()
+
+	lobby_id = payload["lobby_id"]
+	if lobby_id not in current_app.config[M_LOBBIES]:
+		return MResponse(
+			FAILED,
+			"Invalid lobby id.",
+			[]
+		).as_json()
+
+	lobby = current_app.config[M_LOBBIES][lobby_id]
+
+	members = []
+	for mem in lobby.members:
+		query = User.query.filter_by(id = mem).first()
+		members.append(query.username)
+
+	return MResponse(
+		SUCESS,
+		"Sucessfully fetched host state of lobby",
+		members
 	).as_json()

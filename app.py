@@ -39,6 +39,7 @@ app.add_url_rule("/lobby_leave",             view_func = lobby_leave,           
 app.add_url_rule("/lobby_update_host_state", view_func = lobby_update_host_state, methods = ["POST"])
 app.add_url_rule("/lobby_get_host_state",    view_func = lobby_get_host_state,    methods = ["POST"])
 app.add_url_rule("/lobby_get",               view_func = lobby_get,               methods = ["POST"])
+app.add_url_rule("/lobby_get_members",       view_func = lobby_get_members,       methods = ["POST"])
 
 # Video system
 app.add_url_rule("/get_video",      view_func = get_video,      methods = ["POST"])
