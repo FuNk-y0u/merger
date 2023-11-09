@@ -11,7 +11,10 @@
 			integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 			crossorigin="anonymous">
 		</script>
-
+		<script
+			src="https://kit.fontawesome.com/0d4140c03e.js"
+			crossorigin="anonymous">
+		</script>
 		<link rel="stylesheet" href="home.css">
 		<script type="module" src="home.js"></script>
 	</head>
@@ -29,8 +32,17 @@
 						<input class="form-control me-2" id="lobby_id" type="search" placeholder="Lobby id" aria-label="Lobby id">
 						<button class="btn btn-outline-success" id="join_lobby">Join</button>
 					</form>
-
-				</div>
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+							<i class="fa-solid fa-user" style="color: #ffffff;"></i>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-lg-end">
+							<li><h6 class="dropdown-header">Account Settings:</h6></li>
+							<li><a class="dropdown-item" id="view_account">View Account</a></li>
+							<li><a class="dropdown-item" id="logout" on>Logout</a></li>
+						</ul>
+					  </div>
+					</div>
 			</nav>
 		 </div>
 

@@ -2,7 +2,8 @@ import {
 	server_ip,
 	server_query,
 	response_status,
-	redirect_page
+	redirect_page,
+	loose_redirect
 } from "./../../utils/utils.js";
 import { Modal } from "./../../utils/modal.js"
 
@@ -29,6 +30,36 @@ join_lobby_button.addEventListener("click", () => {
 	redirect_page("lobby", params);
 });
 
+const account_logout_button = document.getElementById("logout");
+account_logout_button.addEventListener("click", () => {
+	localStorage.removeItem("token");
+	localStorage.removeItem("email");
+	localStorage.removeItem("user_id");
+	localStorage.removeItem("username");
+	loose_redirect("login");
+})
+
+const account_details_button = document.getElementById("view_account");
+account_details_button.addEventListener("click", () => {
+	modal.set_title("Account Details");
+	modal.set_body(`
+		<table>
+		<tr>
+			<td> <i class="fa-solid fa-user" style="color: #0d6efd;"></i></td>
+			<td> ${localStorage.getItem("username")} </td>
+		</tr>
+		<tr>
+			<td> <i class="fa-solid fa-envelope" style="color: #0d6efd;"></i></td>
+			<td> ${localStorage.getItem("email")} </td>
+		</tr>
+		<tr>
+			<td> <i class="fa-solid fa-id-card-clip" style="color: #0d6efd;"></i></td>
+			<td> ${localStorage.getItem("user_id")} </td>
+		</tr>
+		</table>
+	`);
+	modal.show();
+})
 
 /*
  * Coming soon page redirection

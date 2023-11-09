@@ -60,11 +60,23 @@
 			<p id="media_loading_text">Media is loading please wait</p>
 		</div>
 
-		<div id="frame">
-			<video id="player" playsinline controls>
-				<track id="track" kind="captions" label="English" srclang="en" default />
-			</video>
-		</div>
+		<table>
+			<td>
+				<div id="frame">
+					<video id="player" playsinline controls>
+						<track id="track" kind="captions" label="English" srclang="en" default />
+					</video>
+				</div>
+			</td>
+			<td>
+				<table id="watch_list" style="align-items: center;">
+					<hd>
+						Watchers
+					</hd>
+				</table>
+			</td>
+			
+		</table>
 
 		<div id="modal_root"></div>
 	</body>

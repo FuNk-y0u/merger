@@ -134,6 +134,10 @@ function convertSrtCue(caption) {
 	return cue;
 }
 
+function get_random_int(max) {
+	return Math.floor(Math.random() * max);
+}
+
 export {
 	server_ip,
 	sleep,
@@ -142,5 +146,6 @@ export {
 	auth,
 	loose_redirect,
 	redirect_page,
-	srt_to_vtt
+	srt_to_vtt,
+	get_random_int
 }
