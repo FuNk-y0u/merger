@@ -31,7 +31,7 @@ const server_query = async (endpoint, method, payload) => {
 			let data = JSON.parse(result);
 			return data;
 		}
-		throw new Error("Failed to fetch.");
+		throw new Error(`Failed to fetch at endpoint ${endpoint}`);
 	})
 	.catch((error) => {
 		return {

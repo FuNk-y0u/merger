@@ -14,6 +14,8 @@ import {
 } from "./lobby_api.js"
 import { Player } from "./player.js"
 
+let update = true;
+
 const colors = ["#0d6efd", "#ff4f4f", "#5cb038"]
 const modal = new Modal(
 	document.getElementById("modal_root")
@@ -36,8 +38,7 @@ const get_url_params = () => {
  * Return button
  */
 
-const return_button = document.getElementById("return");
-return_button.addEventListener("click", async () => {
+const leave_lobby = async () => {
 	let token    = localStorage.getItem("token");
 	let user_id  = localStorage.getItem("user_id");
 	let lobby_id = document.getElementById("lobby_id").innerHTML;
@@ -55,6 +56,11 @@ return_button.addEventListener("click", async () => {
 		return;
 	}
 	alert(response.log);
+}
+
+const return_button = document.getElementById("return");
+return_button.addEventListener("click", async () => {
+	update = false;
 });
 
 
@@ -120,29 +126,42 @@ const update_watch_list = async (id) => {
 	}
 
 	let res = await server_query("/lobby_get_members", "POST", payload);
-	
-	if (res.status != response_status.SUCESS)
-	{
-		alert(res.log);
-		redirect_page("home");
-		return;
+	if (res.status == response_status.SUCESS) {
+		const watch_list_table = document.getElementById("watch_list");
+		watch_list_table.innerHTML = "";
+
+		let members = res.ext;
+		members.forEach(element => {
+			watch_list_table.innerHTML += `
+				<tr>
+					<td> <i class="fa-solid fa-user" style="color: ${colors[get_random_int(3)]};"></i> </td>
+					<td> ${element} </td>
+				</tr>
+			`
+		});
 	}
+	return res;
+}
 
-	let members = res.ext;
-	console.log(members);
-	const watch_list_table = document.getElementById("watch_list");
-	watch_list_table.innerHTML = "";
-	members.forEach(element => {
 
-		watch_list_table.innerHTML += `
-			<tr>
-				<td> <i class="fa-solid fa-user" style="color: ${colors[get_random_int(3)]};"></i> </td>
-				<td> ${element} </td>
-			</tr>
-		`
-	});
-	sleep(3000);
-	update_watch_list(id);
+/*
+ * Function that updates the watch list and syncronizes the player
+ */
+
+const update_lobby = async (player, lobby_id) => {
+	while (update) {
+		let res = await update_watch_list(lobby_id);
+		if (res.status != response_status.SUCESS) {
+			alert(res.log);
+			return;
+		}
+
+		res = await player.sync(lobby_id);
+		if (res.status != response_status.SUCESS) {
+			alert(res.log);
+			return;
+		}
+	}
 }
 
 const render_lobby = async () => {
@@ -154,8 +173,6 @@ const render_lobby = async () => {
 		redirect_page("home");
 		return;
 	}
-
-	update_watch_list(lobby.id);
 
 	// Getting video from backend
 	let video = await get_video(lobby.movie_id);
@@ -172,9 +189,9 @@ const render_lobby = async () => {
 		document.getElementById("frame").style.display = 'flex';
 	});
 
-	player.init(() => {
-		player.sync(lobby.id);
-	});
+	await player.init();
+	await update_lobby(player, lobby.id);
+	await leave_lobby();
 }
 
 window.onload = render_lobby();
