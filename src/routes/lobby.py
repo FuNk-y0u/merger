@@ -28,6 +28,7 @@ def lobby_create() -> Response:
 		).as_json()
 
 	new_lobby = Lobby(admin_id)
+	new_lobby.members.append(query.username)
 
 	current_app.config[M_LOBBIES].update({new_lobby.id: new_lobby})
 
@@ -110,7 +111,7 @@ def lobby_join() -> Response:
 			[]
 		).as_json()
 
-	lobby.members.append(user_id)
+	lobby.members.append(query.username)
 
 	return MResponse(
 		SUCESS,
