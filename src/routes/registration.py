@@ -2,6 +2,7 @@ from src.inc import *
 from src.model import pdb, User
 from src.utils import verify_key
 from src.defines import *
+from src.routes.auth import *
 
 def signup() -> Response:
 	payload = request.get_json()
@@ -95,3 +96,36 @@ def connection_check() -> Response:
 		f"server connection sucessfull",
 		[{}]
 	).as_json()
+
+
+@auth_token
+def get_user() -> Response:
+	payload = request.get_json()
+
+	if not verify_key(["id"], payload):
+		return MResponse(
+			FAILED,
+			"`id` are the required payload fields.",
+			[]
+		).as_json()
+
+	id = payload["id"]
+	query = User.query.filter_by(id = id).first()
+	if not query:
+		return MResponse(
+			FAILED,
+			"Invalid user id",
+			[]
+		).as_json()
+
+	user = {
+		"email"   : query.email,
+		"username": query.username
+	}
+
+	return MResponse(
+		SUCESS,
+		"Sucessfully fetched user data",
+		[user]
+	).as_json()
+

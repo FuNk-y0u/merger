@@ -26,9 +26,10 @@ app.config[M_LOBBIES] = {}
 app.add_url_rule("/connect", view_func = connection_check, methods = ["GET"])
 
 # Registration endpoints
-app.add_url_rule("/auth",   view_func = auth,   methods = ["POST"])
-app.add_url_rule("/signup", view_func = signup, methods = ["POST"])
-app.add_url_rule("/login",  view_func = login,  methods = ["POST"])
+app.add_url_rule("/auth",     view_func = auth,     methods = ["POST"])
+app.add_url_rule("/signup",   view_func = signup,   methods = ["POST"])
+app.add_url_rule("/login",    view_func = login,    methods = ["POST"])
+app.add_url_rule("/get_user", view_func = get_user, methods = ["POST"])
 
 # Lobby endpoints
 app.add_url_rule("/lobby_create",            view_func = lobby_create,            methods = ["POST"])
