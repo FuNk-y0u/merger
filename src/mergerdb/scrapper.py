@@ -1,8 +1,38 @@
 from src.inc import *
 
+
+class SubtitleScrapper:
+	def __init__(self):
+		self.url = os.getenv("OPENSUBTITLE_URL")
+
+	def scrape(self, imdb_id: str) -> str:
+		page: BeautifulSoup = self.__get_download_page(imdb_id)
+		url = self.__select_eng_url(page)
+		return url
+
+	def __get_download_page(self, imdb_id: str) -> BeautifulSoup:
+		id = imdb_id.strip("tt")
+		url = f"{self.url}/en/search/sublanguageid-all/imdbid-{id}"
+		response = requests.get(url)
+		return BeautifulSoup(response.text, "html.parser")
+
+	def __select_eng_url(self, page: BeautifulSoup) -> str:
+		table = page.find(id = "search_results")
+		rows = table.find_all("tr", { "class": "change" })[1:]
+
+		for row in rows:
+			tds = row.find_all("td")
+			lang = tds[1].find("a")["title"]
+			if lang == "English":
+				return self.url + tds[4].find("a")["href"]
+		return None
+
+
 class Scrapper:
 	def __init__(self):
 		self.url = os.getenv("YTS_URL")
+
+		self.subtitle_scrapper = SubtitleScrapper()
 
 		#NOTE: ':' is removed
 		self.not_allowed = ["\\","/",'"',"<",">","|"]
@@ -13,13 +43,13 @@ class Scrapper:
 
 		for link in movie_links:
 			movie = self.scrape_movie(link)
-			print(movie)
 			if movie["title"] and movie["poster_url"] and movie["torrent_url"]:
 				movies.update({
 					str(uuid.uuid4()): {
-						"title"      : movie["title"],
-						"poster_url" : movie["poster_url"],
-						"torrent_url": movie["torrent_url"]
+						"title"       : movie["title"],
+						"poster_url"  : movie["poster_url"],
+						"torrent_url" : movie["torrent_url"],
+						"subtitle_url": movie["subtitle_url"]
 					}
 				})
 
@@ -68,16 +98,26 @@ class Scrapper:
 
 			return None
 
+		def __get_subtitle_url(soup: BeautifulSoup) -> str:
+			anchor = soup.find(title = re.compile("Download Subtitles"))
+			if not anchor: return None
+
+			imdb_id = anchor["href"].split("/")[-1]
+			url = self.subtitle_scrapper.scrape(imdb_id)
+			return url
+
 		response = requests.get(movie_link)
 		soup = BeautifulSoup(response.text, "html.parser")
 
 		title       = __get_title(soup)
 		poster_url  = __get_poster_url(soup)
 		torrent_url = __get_torrent_url(soup, title)
+		subtitle_url = __get_subtitle_url(soup)
 
 		return {
-			"title"      : title,
-			"poster_url" : poster_url,
-			"torrent_url": torrent_url
+			"title"       : title,
+			"poster_url"  : poster_url,
+			"torrent_url" : torrent_url,
+			"subtitle_url": subtitle_url
 		}
 

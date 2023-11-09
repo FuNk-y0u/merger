@@ -33,7 +33,10 @@ def get_video() -> Response:
 	return MResponse(
 		SUCESS,
 		f"Sucessfully fetched vide url.",
-		[movie.video_url]
+		[{
+			"url": movie.video_url,
+			"subtitle": movie.subtitle_url
+		}]
 	).as_json()
 
 
