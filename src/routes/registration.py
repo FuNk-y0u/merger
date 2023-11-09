@@ -88,6 +88,7 @@ def login() -> Response:
 		[{"token": jwt_token}]
 	).as_json()
 
+
 def connection_check() -> Response:
 	return MResponse(
 		SUCESS,
