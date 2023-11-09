@@ -3,13 +3,15 @@ import {
 	server_query,
 	response_status,
 	redirect_page,
+	srt_to_vtt
 } from "./../../utils/utils.js";
 import { extract_m3u8_pl } from "./../../utils/extractor.js"
 
 class Player {
-	constructor(player_id, host, url, callback) {
+	constructor(player_id, host, url, subtitle, callback) {
 		this.host = host;
 		this.url = url;
+		this.subtitle = subtitle;
 
 		this.video = document.getElementById(player_id);
 		this.player = this.create_plyr_player(player_id, host);
@@ -21,8 +23,42 @@ class Player {
 	async init(callback) {
 		const source = await extract_m3u8_pl(this.url);
 		this.attach_hls(source);
+		await this.add_subtitle();
 		callback.bind(this)();
 		
+	}
+
+	async add_subtitle() {
+		if (!this.subtitle) {
+			alert("This movie doesnt include subtitles. Sorry!");
+			return;
+		}
+
+		let srt_file = await fetch(this.subtitle, { method: "GET" })
+			.then(async (response) => {
+				let zip = await response.blob();
+				return JSZip.loadAsync(zip).then((content) => {
+					return Object.values(content.files)[0].async("text");
+				});
+			})
+			.catch((error) => {
+				alert(error);
+				return null;
+			});
+
+		if (!srt_file) return;
+
+		let vtt_file = srt_to_vtt(srt_file);
+
+		let track = document.getElementById("track").track;
+		track.mode = "showing";
+
+		const parser = new WebVTTParser();
+		const tree = parser.parse(vtt_file, "metadata");
+		const cues = tree.cues;
+		cues.forEach((cue) => {
+			track.addCue(new VTTCue(cue.startTime, cue.endTime, cue.text));
+		});
 	}
 
 	sync(lobby_id) {

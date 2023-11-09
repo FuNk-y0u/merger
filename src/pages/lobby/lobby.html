@@ -21,6 +21,13 @@
 		<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 		<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/webvtt-parser/2.2.0/parser.js">
+		</script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+		</script>
+
 		<script type="module" src="lobby.js"></script>
 		<link rel="stylesheet" href="lobby.css">
 	</head>
@@ -28,30 +35,35 @@
 	<body>
 
 		<!-- Nav bar -->
-		 <div>
+		<div>
 			<nav class="navbar bg-body-tertiary">
 				<div class="container-fluid">
 					<a class="navbar-brand" id="return"><i class="fa-solid fa-arrow-left"></i></a>
 				</div>
 			</nav>
-		 </div>
+		</div>
 
-		 <div id="lobby_id_card" class="card text-center">
+		<div id="lobby_id_card" class="card text-center">
 			<div class="card-header">
-			  Lobby Code
+				Lobby Code
 			</div>
+
 			<div class="card-body">
-			  <h5 class="card-title" id="lobby_id"></h5>
-			  <p class="card-text">Share lobby code to watch together</p>
-			  <a href="#" class="btn btn-primary" id="copy_clipboard"><i class="fa-solid fa-copy" style="color: #ffffff;"></i> Copy code</a>
+				<h5 class="card-title" id="lobby_id"></h5>
+				<p class="card-text">Share lobby code to watch together</p>
+				<a href="#" class="btn btn-primary" id="copy_clipboard"><i class="fa-solid fa-copy" style="color: #ffffff;"></i> Copy code</a>
 			</div>
 		</div>
+
 		<div id="media_loading">
 			<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 			<p id="media_loading_text">Media is loading please wait</p>
 		</div>
+
 		<div id="frame">
-			<video id="player" playsinline controls></video>
+			<video id="player" playsinline controls>
+				<track id="track" kind="captions" label="English" srclang="en" default />
+			</video>
 		</div>
 
 		<div id="modal_root"></div>

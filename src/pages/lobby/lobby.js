@@ -102,14 +102,13 @@ const handle_lobby = async (params) => {
  * Video system
  */
 
-const get_video_url = async (video_id) => {
+const get_video = async (video_id) => {
 	let res = await server_query("/get_video", "POST", { video_id: video_id });
 	if (res.status != response_status.SUCESS) {
 		alert(res.log);
 		return null;
 	}
-	let url = res.ext[0]
-	return url;
+	return res.ext[0];
 }
 
 const render_lobby = async () => {
@@ -121,16 +120,21 @@ const render_lobby = async () => {
 		return;
 	}
 
-	let url = await get_video_url(lobby.movie_id);
+	// Getting video from backend
+	let video = await get_video(lobby.movie_id);
+	let url = video.url;
+	let subtitle = video.subtitle;
+
 	if (!url) {
 		redirect_page("home");
 		return;
 	}
 
-	let player = new Player("player", params.host, url, () => {
+	let player = new Player("player", params.host, url, subtitle, () => {
 		document.getElementById("media_loading").style.display = 'none';
 		document.getElementById("frame").style.display = 'flex';
 	});
+
 	player.init(() => {
 		player.sync(lobby.id);
 	});
