@@ -312,6 +312,6 @@ def lobby_get_members() -> Response:
 
 	return MResponse(
 		SUCESS,
-		"Sucessfully fetched host state of lobby",
+		"Sucessfully fetched members list",
 		members
 	).as_json()
