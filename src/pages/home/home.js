@@ -106,7 +106,13 @@ const render_video_cards = async () => {
 	const movie_grid = document.getElementById("movie_grid");
 	movie_grid.innerHTML = "";
 
-	let response = await server_query("/get_video_list?uploaded=True", "GET", {});
+	let params = {
+		uploaded: true,
+		page_no: 1,
+		per_page: 10
+	};
+
+	let response = await server_query("/get_video_list", "POST", params);
 	if (response.status != response_status.SUCESS) {
 		modal.set_title("Error");
 		modal.set_body(response.log);
