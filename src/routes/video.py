@@ -41,8 +41,27 @@ def get_video() -> Response:
 
 
 def get_video_list() -> Response:
-	uploaded = request.args.get("uploaded")
-	query = Movie.query.filter_by(uploaded=uploaded).all()
+	payload = request.get_json()
+
+	if not verify_key(["uploaded", "page_no", "per_page"], payload):
+		return MResponse(
+			FAILED,
+			"`uploaded`, `page_no`, `per_page` are the required payload fields.",
+			[]
+		).as_json()
+
+	uploaded = payload["uploaded"]
+	page_no  = payload["page_no"]
+	per_page = payload["per_page"]
+
+	query = Movie.query.filter_by(uploaded=uploaded).paginate(page=page_no, per_page=per_page)
+
+	if not query:
+		return MResponse(
+			FAILEd,
+			"Reached empty page",
+			[]
+		).as_json()
 
 	videos = {}
 	for movie in query:

@@ -43,7 +43,7 @@ app.add_url_rule("/lobby_get_members",       view_func = lobby_get_members,     
 
 # Video system
 app.add_url_rule("/get_video",      view_func = get_video,      methods = ["POST"])
-app.add_url_rule("/get_video_list", view_func = get_video_list, methods = ["GET"])
+app.add_url_rule("/get_video_list", view_func = get_video_list, methods = ["POST"])
 
 # Database system
 app.add_url_rule("/search_new_movie", view_func = mergerdb.search_new_movie, methods = ["POST"])
