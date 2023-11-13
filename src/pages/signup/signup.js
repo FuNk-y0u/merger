@@ -63,19 +63,8 @@ button.addEventListener("click", async () => {
 		return;
 	}
 
-	// Loging in
-	response = await server_query("/login", "POST", payload);
-	if (response.status == response_status.FAILED) {
-		modal.set_title("Login Error!");
-		modal.set_body(response.log);
-		modal.show();
-		return;
-	}
-
-	// Saving the token
-	let token = response.ext[0].token;
-	localStorage.setItem("token", token);
-
-	// Redirect
-	redirect_page("loading");
+	modal.set_title("Sucess");
+	modal.set_body(response.log);
+	modal.show();
+	return;
 });
