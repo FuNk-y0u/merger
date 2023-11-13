@@ -6,6 +6,7 @@ from src.model import *
 from src.routes.video import *
 from src.routes.lobby import *
 from src.routes.registration import *
+from src.routes.verify_mail  import *
 from src.routes.auth import *
 
 from src.mergerdb.mergerdb import *
@@ -26,10 +27,11 @@ app.config[M_LOBBIES] = {}
 app.add_url_rule("/connect", view_func = connection_check, methods = ["GET"])
 
 # Registration endpoints
-app.add_url_rule("/auth",     view_func = auth,     methods = ["POST"])
-app.add_url_rule("/signup",   view_func = signup,   methods = ["POST"])
-app.add_url_rule("/login",    view_func = login,    methods = ["POST"])
-app.add_url_rule("/get_user", view_func = get_user, methods = ["POST"])
+app.add_url_rule("/auth",                view_func = auth,        methods = ["POST"])
+app.add_url_rule("/signup",              view_func = signup,      methods = ["POST"])
+app.add_url_rule("/login",               view_func = login,       methods = ["POST"])
+app.add_url_rule("/get_user",            view_func = get_user,    methods = ["POST"])
+app.add_url_rule("/verify_mail/<token>", view_func = verify_mail, methods = ["GET"])
 
 # Lobby endpoints
 app.add_url_rule("/lobby_create",            view_func = lobby_create,            methods = ["POST"])
