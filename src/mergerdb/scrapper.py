@@ -49,7 +49,8 @@ class Scrapper:
 						"title"       : movie["title"],
 						"poster_url"  : movie["poster_url"],
 						"torrent_url" : movie["torrent_url"],
-						"subtitle_url": movie["subtitle_url"]
+						"subtitle_url": movie["subtitle_url"],
+						"description" : movie["description"]
 					}
 				})
 
@@ -106,18 +107,27 @@ class Scrapper:
 			url = self.subtitle_scrapper.scrape(imdb_id)
 			return url
 
+		def __get_description(soup: BeautifulSoup) -> str:
+			synopsis = soup.find(id = "synopsis")
+			if not synopsis: return None
+
+			paragraph = synopsis.find_all("p")[0]
+			return paragraph.text
+
 		response = requests.get(movie_link)
 		soup = BeautifulSoup(response.text, "html.parser")
 
-		title       = __get_title(soup)
-		poster_url  = __get_poster_url(soup)
-		torrent_url = __get_torrent_url(soup, title)
+		title        = __get_title(soup)
+		poster_url   = __get_poster_url(soup)
+		torrent_url  = __get_torrent_url(soup, title)
 		subtitle_url = __get_subtitle_url(soup)
+		description  = __get_description(soup)
 
 		return {
 			"title"       : title,
 			"poster_url"  : poster_url,
 			"torrent_url" : torrent_url,
-			"subtitle_url": subtitle_url
+			"subtitle_url": subtitle_url,
+			"description" : description
 		}
 

@@ -33,3 +33,4 @@ class Movie(pdb.Model, UserMixin):
 	video_url    = pdb.Column(pdb.String())
 	subtitle_url = pdb.Column(pdb.String())
 	uploaded     = pdb.Column(pdb.Boolean, default = False)
+	description  = pdb.Column(pdb.String())

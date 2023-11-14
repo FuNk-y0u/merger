@@ -36,10 +36,16 @@ class MergerDB:
 	def add_new_movie(self) -> Response:
 		payload = request.get_json()
 
-		if not verify_key(["title", "poster_url", "torrent_url", "subtitle_url"], payload):
+		if not verify_key([
+			"title",
+			"poster_url",
+			"torrent_url",
+			"subtitle_url",
+			"description"
+		], payload):
 			return MResponse(
 				FAILED,
-				"`title`, `poster_url`, `torrent_url`, `subtitle_url` are the required payload fields.",
+				"`title`, `poster_url`, `torrent_url`, `subtitle_url`, `description` are the required payload fields.",
 				[]
 			).as_json()
 
@@ -60,6 +66,7 @@ class MergerDB:
 			poster_url   = payload["poster_url"],
 			torrent_url  = payload["torrent_url"],
 			subtitle_url = payload["subtitle_url"],
+			description  = payload["description"],
 			uploaded     = False
 		)
 
