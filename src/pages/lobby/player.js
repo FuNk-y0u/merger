@@ -71,17 +71,15 @@ class Player {
 
 	create_plyr_player(player_id, host) {
 		let params = {
-			controls: ['play-large', 'play', 'progress', 'current-time', 'captions', 'fullscreen', 'settings']
+			controls: ['play-large', 'play', 'progress', 'current-time', 'captions', 'volume', 'fullscreen', 'settings']
 		};
 		if (!host) {
-			params = {
-				listeners: {
-					seek: function (e) {
-						e.preventDefault();
-						return false;
-					}
+			params.listeners =  {
+				seek: function (e) {
+					e.preventDefault();
+					return false;
 				}
-			};
+			}
 		}
 		const player = new Plyr(`#${player_id}`, params);
 		return player;
