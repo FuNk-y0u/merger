@@ -54,11 +54,18 @@ def get_video_list() -> Response:
 	page_no  = payload["page_no"]
 	per_page = payload["per_page"]
 
-	query = Movie.query.filter_by(uploaded=uploaded).paginate(page=page_no, per_page=per_page)
+	try:
+		query = Movie.query.filter_by(uploaded=uploaded).paginate(page=page_no, per_page=per_page)
+	except Exception as e:
+		return MResponse(
+			FAILED,
+			e,
+			[]
+		).as_json()
 
 	if not query:
 		return MResponse(
-			FAILEd,
+			FAILED,
 			"Reached empty page",
 			[]
 		).as_json()
