@@ -6,8 +6,8 @@ const response_status = {
 	NOT_FOUND			: 404
 };
 
-//const server_ip = "https://merger-dev-pfqf.2.sg-1.fl0.io";
-const server_ip = "http://localhost:8080";
+const server_ip = "https://merger-dev-pfqf.2.sg-1.fl0.io";
+// const server_ip = "http://localhost:8080";
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -61,7 +61,7 @@ const auth = async () => {
 const loose_redirect = async (page_name, params = null) => {
 	let root_path = localStorage.getItem("root_path");
 
-	let url = `${root_path}/pages/${page_name}/${page_name}.html`;
+	let url = `${root_path}/${page_name}/${page_name}.html`;
 	if (params) url += "?" + params;
 
 	window.location.href = url;

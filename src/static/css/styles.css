@@ -1,0 +1,696 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+:root{
+    --primary_bg: #3B3B3B;
+    --secondary_bg: #2D2D2D;
+    --tertiary_bg: #222222;
+    --white: #ffffff;
+    --primary: #8C52FF;
+    --primary_selected: #7545d3;
+    --gold: #fcba03;
+    --red: #ed4755;
+
+}
+
+*{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    user-select: none;
+    
+}
+
+body{
+    background-color: var(--primary_bg);
+    overflow-x: hidden;
+}
+
+i{
+    padding: 15px;
+}
+
+
+/* * == index page == */
+/* * Sidebar Portion */
+.sidebar{
+    position: fixed;
+    height: 100%;
+    width: 260px;
+    background-color: var(--secondary_bg);
+    padding: 15px;
+}
+
+.sidebar a{
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar .logo{
+    font-size: 25px;
+    padding: 0 15px;
+}
+
+.sidebar .menu-content{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin-top: 40px ;
+}
+
+.sidebar .item a{
+    padding: 16px;
+    width: 100%;
+    display: inline-block;
+    border-radius: 12px;
+}
+
+.sidebar .item a:hover{
+    background-color: var(--primary_bg);
+}
+
+.sidebar .a_page.selected{
+    background-color: var(--primary);
+}
+
+.sidebar .a_page.selected:hover{
+    background-color: var(--primary_selected);
+}
+
+/* * Navbar Portion */
+.navbar{
+    background-color: var(--primary_bg);
+    position: fixed;
+    color: white;
+    padding: 20px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.navbar #sidebar-close{
+    cursor: pointer;
+}
+
+/* * Main-display Portion */
+.main-display, .navbar {
+    left: 260px;
+    width: calc(100% - 260px);
+    transition:  all 0.5s ease;
+    z-index: 1000;
+}
+
+.main-display{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    z-index: 100;
+    background: #e7f2fd;
+}
+
+.main-display iframe{
+    padding-top: 70px;
+    width: 100vw;
+    height: 100vh;
+    border-style: none;   
+}
+
+/* * Main-display & Sidebar Close Portion */
+.sidebar.close ~ .navbar,
+.sidebar.close ~ .main-display{
+    left: 0;
+    width: 100%;
+}
+
+/* * === Discover page css === */
+/* * Featured portion */
+.featured{
+    width: 100vw;
+    height: 250px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background-image: linear-gradient(transparent, var(--primary) 75%), url('../../static/images/banner.jpg');
+    text-shadow: 4px 4px 6px var(--tertiary_bg);
+}
+
+.featured .featured_title{
+    padding: 10px;
+    color: var(--white);
+}
+
+.featured .search_bar{
+    outline: none;
+    border-radius: 10px;
+    height: 50px;
+    width: 30%;
+    padding-left: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.featured .search_bar:focus{
+    outline: none;
+    border: solid 4px var(--primary_bg);
+}
+
+.featured .search_button{
+    background-color: var(--primary_bg);
+    border-style: none;
+    border-radius: 10px;
+    transition: box-shadow 500ms ease;
+    cursor: pointer;
+    margin: 10px;
+    padding: 6px;
+}
+
+.featured .search_button:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.featured .search_button i{
+    color: var(--white);
+}
+
+
+/* * Movies portion */
+.movie_grid{
+	width: 100%;
+    height: calc(100%-250px);
+	display: grid;
+	grid-template-columns: repeat(auto-fit,min(200px,200px));
+	grid-template-rows: repeat(4, 300px);
+	gap: 20px;
+    padding-right: 350px;
+    padding-left: 50px;
+	box-sizing: border-box;
+
+}
+
+.movie_grid .show{
+    color: var(--white);
+	grid-column-start: auto;
+	grid-row-start: auto;
+	width: 100%;
+	height: 100%;
+	background-color: var(--secondary_bg);
+	border-radius: 5px;
+	transition: box-shadow .2s;
+	transition: background-color .2s;
+	grid-auto-rows: 200px;
+	text-align: center;
+	font-size: 14px;
+    transition: transform  300ms ease;
+    cursor: pointer;
+}
+
+.movie_grid .show img{
+    width: 180px;
+    height: 250px;
+    border-radius: 10px;
+}
+
+.movie_grid .show:hover{
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	background-color: var(--primary_selected);
+    transform: scale(1.2) translateY(-40px);
+}
+
+.movie_grid .show.eager{
+    width: 500px;
+    text-align: right;
+    animation: translate 300ms ease;
+    transform: translateY(-40px) scale(1.2) translateX(30px);
+    font-size: 10px;
+}
+
+.movie_grid .show .eager_div{
+    display: none;
+    padding: 10px;
+}
+
+@keyframes translate {
+    0%{
+        opacity: 0%;
+        transform: scale(1.0) translateX(0px) translateY(0px);
+    }
+    100%{
+        opacity: 100%;
+        transform: scale(1.2) translateX(30px) translateY(-35px);
+    }
+}
+
+/* * page portion */
+.pagination{
+    display: flex;
+    color: var(--white);
+    justify-content: center;
+    padding: 10px;
+}
+
+
+.pagination button{
+    border-radius: 10px;
+    background-color: var(--primary);
+    border-style: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.pagination button:hover{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: var(--primary_selected);
+}
+
+/* * display title portion */
+.display_title{
+    color: var(--white);
+    padding-left: 50px;
+}
+
+/* * === coming_soon page css === */
+/* * modal portion */
+.movie_grid_modal{
+	width: 100%;
+    height: 100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fit,min(200px,200px));
+	grid-template-rows: repeat(4, 300px);
+	gap: 20px;
+    padding-right: 350px;
+    padding-left: 50px;
+	box-sizing: border-box;
+}
+
+.movie_grid_modal .show_modal{
+    color: var(--white);
+	grid-column-start: auto;
+	grid-row-start: auto;
+	width: 100%;
+	height: 100%;
+	background-color: var(--secondary_bg);
+	border-radius: 5px;
+	transition: box-shadow .2s;
+	transition: background-color .2s;
+	grid-auto-rows: 200px;
+	text-align: center;
+	font-size: 14px;
+    cursor: pointer;
+}
+
+.movie_grid_modal .show_modal img{
+    width: 180px;
+    height: 250px;
+    border-radius: 10px;
+}
+
+.movie_grid_modal .show_modal:hover{
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	background-color: var(--primary_selected);
+}
+
+/* * === theatre page css === */
+/* * grid portion */
+.lobby_grid{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 100px 1fr 1fr;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+/* * video portion */
+.lobby_grid .video_frame{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.lobby_grid .video_frame video{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+/* * viewers portion */
+.lobby_grid .viewers{
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary_bg);
+    border-radius: 10px;
+    padding: 10px;  
+    overflow-y: scroll;
+    overflow-x: none;
+}
+
+.lobby_grid .viewers .viewers_title{
+    color: var(--white);
+    font-size: 30px;
+    text-align: center;
+    
+}
+
+.lobby_grid .viewers .viewer_host_you{
+    background-color: var(--primary);
+    width: 100%;
+    height: 80px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    font-size: 20px;
+    color: var(--white);
+    text-align: left;
+    margin: 5px;
+}
+
+.lobby_grid .viewers .viewer_you{
+    background-color: var(--primary);
+    width: 100%;
+    height: 80px;
+    border-radius: 10px;
+    display: flex;
+    text-align: left;
+    align-items: center;
+    font-size: 20px;
+    color: var(--white);
+    margin: 5px;
+}
+
+.lobby_grid .viewers .fa-crown{
+    color: var(--gold);
+}
+
+.lobby_grid .viewers .viewer{
+    background-color: var(--tertiary_bg);
+    width: 100%;
+    height: 80px;
+    border-radius: 10px;
+    display: flex;
+    text-align: left;
+    align-items: center;
+    font-size: 20px;
+    color: var(--white);
+    margin: 5px;
+}
+
+/* * lobby code portion */
+.lobby_grid .lobby_code{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-size: 32px;
+    width: 100%;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.lobby_grid .lobby_code .lobby_code_text{
+    padding: 10px;
+    user-select:text;
+}
+
+.copy_button{
+    background-color: var(--secondary_bg);
+    border-style: none;
+    border-radius: 10px;
+    transition: box-shadow 500ms ease;
+    cursor: pointer;
+    margin: 10px;
+    padding: 6px;
+    color: white;
+}
+
+.copy_button:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+/* * movie details portion */
+.movie_details{
+    width: 100%;
+    height: 100%;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    padding: 10px;
+}
+
+.movie_details img{
+    border-radius: 10px;
+    width: 220px;
+    height: 300px;
+}
+
+.movie_details .movie_title{
+    color: var(--white);
+    padding: 100px;
+}
+
+.movie_details .movie_description{
+    color: var(--white);
+    padding-left: 100px;
+    width: 50%;
+}
+
+.movie_details .movie_details_title{
+    color: var(--white);
+}
+
+/* * === settings page css === */
+/* * Account settings portion */
+
+.wrapper_settings{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper_settings .account_settings{
+    width: 80%;
+    background-color: var(--primary);
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    padding: 50px;
+    
+}
+
+.wrapper_settings .account_settings .account_icon{
+    background-color: var(--tertiary_bg);
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 32px;
+    border-radius: 100%;
+}
+
+.wrapper_settings .account_settings .account_details_text{
+    padding: 10px;
+    font-size: 20px;
+    color: var(--white);
+}
+
+.wrapper_settings .account_settings .account_name{
+    font-size: 30px;
+    user-select:text;
+}
+
+.wrapper_settings .account_settings .account_id{
+    font-size: 30px;
+    user-select:text;
+}
+
+.wrapper_settings .account_settings .account_email{
+    font-size: 30px;
+    user-select:text;
+}
+
+.wrapper_settings .account_settings .account_details_title{
+    color: var(--white);
+    font-size: 30px;
+}
+
+/* * === login page css === */
+/* * Login layout portion */
+.login_wrapper{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login_wrapper .login_table{
+    width: 60%;
+    height: 60%;
+    background-color: var(--secondary_bg);
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    color: var(--white);
+}
+
+/* * Login Form Portion */
+.login_wrapper .login_table .login_form{
+    background-color: var(--tertiary_bg);
+    border-radius: 15px 0 0 15px;
+    padding: 10px;
+    width: 60%;
+}
+
+.login_wrapper .login_table .login_form a{
+    color: var(--primary);
+}
+
+.login_wrapper .login_table .login_form input{
+    background-color: var(--secondary_bg);
+    border-radius: 10px;
+    border: none;
+    color: var(--white);
+    padding: 10px;
+    width: 50%;
+    transition: all 0.3s ease;
+}
+.login_wrapper .login_table .login_form input:focus{
+    box-shadow: var(--primary) 0px 7px 29px 0px;
+    border: none;
+    outline-width: 0;
+}
+.login_wrapper .login_table .login_form button{
+    background-color: var(--secondary_bg);
+    border-radius: 10px;
+    border: none;
+    color: var(--white);
+    padding: 1px;
+    width: 50%;
+    transition: all 0.3s ease;
+}
+.login_wrapper .login_table .login_form button:hover{
+    background-color: var(--primary);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.error_text{
+    color: var(--red);
+}
+
+/* * Login info portion */
+.login_wrapper .login_table .login_info{
+    background-color: var(--primary);
+    border-radius: 0 15px 15px 0;
+    padding: 10px;
+    background-image: linear-gradient(transparent, var(--primary) 75%), url('../../static/images/banner.jpg');
+}
+
+.login_wrapper .login_table .login_info{
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 4px 4px 6px var(--tertiary_bg);
+    
+}
+
+/* * === email verify page css === */
+/* * Email verify layout portion */
+.wrapper_email_verify{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.wrapper_email_verify .email_verify_info{
+    width: 500px;
+    height: 200px;
+    background-color: var(--tertiary_bg);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--primary) 0px 7px 29px 0px;
+    color: white;
+    padding: 10px;
+}
+/* * Email verify back button portion */
+.wrapper_email_verify .email_verify_info .email_verify_back{
+    background-color: var(--secondary_bg);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.wrapper_email_verify .email_verify_info .email_verify_back:hover{
+    background-color: var(--primary);
+}
+
+
+/* * == Loading animation CSS == */
+/* * loading animation */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to { 
+        transform: rotate(360deg);
+    }
+}
+ 
+
+ @-webkit-keyframes rotate {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to { 
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.load {
+	width: 50px;
+	height: 50px;
+	margin: 10px 10px 0;
+	border:solid 5px var(--primary);
+	border-radius: 50%;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	 -webkit-transition: all 0.5s ease-in;
+    -webkit-animation-name:             rotate; 
+    -webkit-animation-duration:         1.0s; 
+    -webkit-animation-iteration-count:  infinite;
+    -webkit-animation-timing-function: ease;
+    	
+    	 transition: all 0.5s ease-in;
+    animation-name:             rotate; 
+    animation-duration:         1.0s; 
+    animation-iteration-count:  infinite;
+    animation-timing-function: ease; 
+}
+
+/* *    loading animation wrapper section */
+.loading_wrapper{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-size: 32px;
+}

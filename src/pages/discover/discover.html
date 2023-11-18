@@ -1,0 +1,77 @@
+<!-- MERGER DISCOVER PAGE -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- css and js -->
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <script src="discover.js"></script>
+
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/0d4140c03e.js" crossorigin="anonymous"></script>
+</head>
+
+<body ondragstart="return false;" ondrop="return false;">
+
+    <!-- featured section -->
+    <div class="featured">
+        <div><h1 class="featured_title">Find and watch movies togther in merger</h1></div>
+        <input class="search_bar" type="text" placeholder="Search movies.. "></input>
+        <button class="search_button"><i class="fas fa-search"></i></button>
+    </div>
+
+    <!-- pagination section -->
+
+    <div class="pagination">
+        <!-- pagination button left -->
+        <button id="pagination_left"><i class="fa-solid fa-arrow-left"></i></button>
+        <!-- pagination data -->
+        <p id="pagination_data">1/10</p>
+        <!-- pagination button right -->
+        <button id="pagination_right"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
+    <!-- display title  section -->
+    <h1 class="display_title" id="display_title">Featured movies</h1>
+
+    <!-- movies section -->
+    <div class="movie_grid">
+
+        <!-- MOVIE DISPLAY TEMPLATE -->
+        <div class="show" id="[movie_id_here]" onmouseenter="on_hover(this.id);" onmouseleave="on_leave(this.id);">
+
+            <!-- Non Hovered Movie-->
+            <div class="non_eager_div">
+                <!--  Movie Image -->
+                <img src="../../static/images/template_movie.jpg" loading="lazy" id="movie_image">
+                <!--  Movie Title -->
+                <div id="movie_title">Spiderman: No way home</div>
+            </div>
+
+            <!--  Hovered Movie With Discription -->
+            <div class="eager_div">
+                <table>
+                    <tr>
+                        <div class="eager_items">
+                            <!--  Movie Image -->
+                            <td><img src="../../static/images/template_movie.jpg" loading="lazy" id="movie_image"></td>
+                            <!-- Movie Title -->
+                            <td><h1 id="movie_title">Spiderman: No way home</h1>
+                                <!-- Movie Description -->
+                                <p class="description" id="movie_description">Discription here about the movie,
+                                note this is a dummy description please reffer to the api.</p>
+                            </td>
+                        </div>
+                    </tr>
+                </table>   
+            </div>
+             
+        </div>
+    </div>
+
+</body>
+</html>

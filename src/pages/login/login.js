@@ -4,58 +4,35 @@ import {
 	response_status,
 	redirect_page,
 	loose_redirect
-} from "./../../utils/utils.js"
-import { Modal } from "./../../utils/modal.js"
+} from "../../utils.js"
 
-const modal = new Modal(
-	document.getElementById("modal_root")
-);
+let emailInput = document.querySelector('#email_input');
+let passwordInput = document.querySelector('#password_input');
+let submitButton = document.querySelector('#submit');
+let errorText = document.querySelector('#error_text');
 
+submitButton.addEventListener("click", async () => {
+    if(emailInput.value == "" || passwordInput.value == "")
+    {
+        errorText.innerHTML = "Woops! you missed your email or password";
+    }
+    else{
 
-/*
- * Signup page redirection
- */
+        let payload = {
+            email: emailInput.value,
+            password: passwordInput.value
+        };
 
-const anchor = document.getElementById("signup");
-anchor.addEventListener("click", async () => {
-	loose_redirect("signup");
-});
+        let response = await server_query("/login", "POST", payload);
+        if(response.status != response_status.SUCESS){
+            console.log(response.log);
+            errorText.innerHTML = response.log;
+            return;
+        }
 
+        let token = response.ext[0].token;
+        localStorage.setItem("token",token);
 
-/*
- * Login system
- */
-
-const button = document.getElementById("login_button");
-button.addEventListener("click", async () => {
-	let email    = document.getElementById("email").value;
-	let password = document.getElementById("password").value;
-
-	// Checking for empty field
-	if (!email || !password) {
-		modal.set_title("Error!");
-		modal.set_body("All input fields must be filled.");
-		modal.show();
-		return;
-	}
-
-	// Server query
-	let payload = {
-		email: email,
-		password: password
-	};
-	let response = await server_query("/login", "POST", payload);
-	if (response.status != response_status.SUCESS) {
-		modal.set_title("Login Error!");
-		modal.set_body(response.log);
-		modal.show();
-		return;
-	}
-
-	// Saving the token
-	let token = response.ext[0].token;
-	localStorage.setItem("token", token);
-
-	// Redirect
-	redirect_page("loading");
-});
+        redirect_page("index");
+    }
+})

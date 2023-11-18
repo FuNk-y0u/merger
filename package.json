@@ -1,14 +1,14 @@
 {
-  "name": "merger-electron",
+  "name": "merger-revamped",
   "version": "1.0.0",
-  "description": "a platform to watch movies together",
-  "main": "main.js",
+  "description": "Application to watch movies together",
+  "main": "index.js",
   "scripts": {
-    "start": "electron main.js ",
+    "start": "electron src/main.js",
     "dist": "electron-builder"
   },
   "build": {
-    "appId": "merger-app",
+    "appId": "merger",
     "dmg": {
       "title": "${productName} ${version}"
     },
@@ -23,8 +23,7 @@
       "icon": "build/icon.ico"
     }
   },
-  "keywords": [],
-  "author": "",
+  "author": "Padkiyo.inc Teach",
   "license": "ISC",
   "devDependencies": {
     "electron": "^26.4.2",
