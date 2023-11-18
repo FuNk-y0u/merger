@@ -1,4 +1,4 @@
-from inc import *
+from utils.inc import *
 
 class Scrapper:
 	def __init__(self, username: str, password: str):

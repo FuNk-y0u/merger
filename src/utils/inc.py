@@ -12,6 +12,9 @@ from bs4.element import Tag
 from ftplib      import FTP
 from tqdm        import tqdm
 
+from typing_extensions import Self
+from typing            import Callable
+
 import hashlib
 import bencode
 import requests
@@ -21,3 +24,4 @@ import json
 import dataclasses
 import time
 import threading
+import sys

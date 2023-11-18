@@ -1,19 +1,28 @@
-from inc import *
+from utils.inc import *
+
+PROCESS_FILE = "process_info.json"
 
 pdb = SQLAlchemy()
 
 
 class MovieStatus:
-	STALLED     = 0
-	DOWNLOADING = 1
-	COMPLETED   = 2
+	QUEUED      = "QUEUED"
+	TORR_QUEUED = "TORR_QUEUED"
+	FTP_QUEUED  = "FTP_QUEUED"
+	SCPR_QUEUED = "SCPR_QUEUED"
+
+class WorkerStatus:
+	OCCUPIED = "OCCUPIED"
+	HALT     = "HALT"
+	FREE     = "FREE"
 
 
 @dataclasses.dataclass
 class MovieInfo:
 	id : str
 	url: str
-	torr_hash: str
+	hash: str
+	content_path: str
 	status: MovieStatus
 
 

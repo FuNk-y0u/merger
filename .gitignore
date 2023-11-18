@@ -2,3 +2,7 @@ venv
 torr_files
 downloads
 src/__pycache__
+src/ftp_handler/__pycache__
+src/scrapper_handler/__pycache__
+src/torrent_handler/__pycache__
+src/utils/__pycache__
