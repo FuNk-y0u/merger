@@ -321,7 +321,26 @@ i{
     gap: 10px;
     box-sizing: border-box;
 }
-
+/* * exit button portion */
+.lobby_grid .leave_lobby{
+    background-color: var(--primary);
+    border-style: none;
+    border-radius: 10px;
+    transition: box-shadow 500ms ease;
+    cursor: pointer;
+    margin: 10px;
+    padding: 6px;
+    width: 60px;
+    height: 60px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+.lobby_grid .leave_lobby:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: var(--primary_selected);
+}
 /* * video portion */
 .lobby_grid .video_frame{
     grid-column-start: 1;
@@ -330,6 +349,7 @@ i{
     grid-row-end: 3;
     width: 100%;
     height: 100%;
+    display: none;
     
 }
 
@@ -351,7 +371,7 @@ i{
     border-radius: 10px;
     padding: 10px;  
     overflow-y: scroll;
-    overflow-x: none;
+    overflow-x:hidden;
 }
 
 .lobby_grid .viewers .viewers_title{
@@ -413,7 +433,7 @@ i{
     color: var(--white);
     font-size: 32px;
     width: 100%;
-    grid-column-start: 1;
+    grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
@@ -421,7 +441,7 @@ i{
 
 .lobby_grid .lobby_code .lobby_code_text{
     padding: 10px;
-    user-select:text;
+    user-select: text;
 }
 
 .copy_button{
@@ -614,9 +634,10 @@ i{
     justify-content: center;
     align-items: center;
     
+    
 }
 .wrapper_email_verify .email_verify_info{
-    width: 500px;
+    width: 800px;
     height: 200px;
     background-color: var(--tertiary_bg);
     border-radius: 15px;
@@ -693,4 +714,64 @@ i{
     align-items: center;
     color: var(--white);
     font-size: 32px;
+}
+
+.load_indicator{
+    color: white;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* * Join lobby section */
+.code_textbox{
+    outline: none;
+    border-radius: 10px;
+    height: 50px;
+    width: 30%;
+    padding-left: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+.join_lobby_wrapper{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.join_lobby_wrapper .join_button{
+    background-color: var(--secondary_bg);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.join_lobby_wrapper .join_button:hover{
+    background-color: var(--primary);
+}
+
+.join_lobby_wrapper .join_lobby_info .temp_wrapper{
+    display: block;
+}
+
+.code_textbox{
+    width: 50%;
+    height: 70px;
+}
+
+.join_theatre_bg{
+    background-image: linear-gradient(transparent, var(--primary) 75%), url('../../static/images/banner.jpg');
 }

@@ -19,14 +19,14 @@
     <!-- featured section -->
     <div class="featured">
         <div><h1 class="featured_title">Movie not found? Add it to upcomings</h1></div>
-        <input class="search_bar" type="text" placeholder="Search movies.. "></input>
-        <button class="search_button" id="add_movie_button"><i class="fa-solid fa-plus"></i></button>
+        <input class="search_bar" type="text" placeholder="Search movies.. " id="movie_search"></input>
+        <button class="search_button" id="add_movie_button" data-bs-toggle="modal" data-bs-target="#movie_selection_modal"><i class="fa-solid fa-plus"></i></button>
     </div>
     <div class="pagination">
         <!-- pagination button left -->
         <button id="pagination_left"><i class="fa-solid fa-arrow-left"></i></button>
         <!-- pagination data -->
-        <p id="pagination_data">1/10</p>
+        <p id="pagination_data">1</p>
         <!-- pagination button right -->
         <button id="pagination_right"><i class="fa-solid fa-arrow-right"></i></button>
     </div>
@@ -34,23 +34,32 @@
     <h1 class="display_title p-5" id="display_title">Upcoming Movies</h1>
 
     <!-- movies section -->
-    <div class="movie_grid">
-
-        <!-- MOVIE DISPLAY TEMPLATE -->
-        <div class="show" id="[movie_id_here]">
-            <!-- Non Hovered Movie-->
-            <div class="non_eager_div">
-                <!-- Movie Image -->
-                <img src="../../static/images/template_movie.jpg" loading="lazy" id="movie_image">
-                <!-- Movie Title -->
-                <div id="movie_title">Spiderman: No way home</div>
-            </div>
-        </div>
+    <div class="movie_grid" id="movie_grid">
     </div>
 
     <!-- Vertically centered scrollable modal -->
     <div id="modal_root">
     </div>  
+    <!-- Movie selection modal -->
+    <div id="movie_selection_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title"><div class="load" id="loading_animation"></div>Which Movies are you reffering to?</h4>
+                </div>
+
+                <div class="modal-body movie_grid" id="movie_selector_body">
+                    
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </body>
 <script src="coming_soon.js" type="module"></script> 
 </html>

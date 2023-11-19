@@ -13,48 +13,44 @@
 
     <!-- Css -->
     <link rel="stylesheet" href="../../static/css/styles.css">
+
+    <!--Player-->
+    <script src="https://cdn.rawgit.com/video-dev/hls.js/18bb552/dist/hls.min.js"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
+    <!--Misc-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webvtt-parser/2.2.0/parser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 
 <body ondragstart="return false;" ondrop="return false;">
     
     <div class="lobby_grid">
 
+        <div class="leave_lobby" id="leave_lobby">
+           <i class="fa-solid fa-right-from-bracket" id="leave_icon"></i>
+        </div>
         <!-- lobby code copy section -->
-        <div class="lobby_code">
-            Lobby Code <p id="lobby_code_text" class="lobby_code_text">xxxx-xxxx-xxxx</p> <button class="copy_button"><i class="fa-solid fa-copy"></i></button>
+        <div class="lobby_code" id="lobby_code">
+            Lobby Code <p id="lobby_code_text" class="lobby_code_text">xxxx-xxxx-xxxx</p> <button class="copy_button" id="copy_button"><i class="fa-solid fa-copy"></i></button>
         </div>
 
+        
+        <div class="load_indicator" id="load_indicator">
+            
+            <div class="load"></div> Loading Media Please Wait
+        </div>
         <!-- Video player code -->
-        <div class="video_frame">
+        <div class="video_frame" id="video_frame">
             <video id="player" playsinline controls>
                 <track id="track" kind="captions" label="English" srclang="en" default />
             </video>
         </div>
 
         <!-- Viewers section -->
-        <div class="viewers">
-
+        <div class="viewers" id="viewers">
             <div class="viewers_title"><i class="fa-solid fa-eye"></i>audience</div>
-
-            <!-- You + Host Template-->
-            <div class="viewer_host_you">
-                <i class="fa-solid fa-user"></i> <div id="viewer_username">[Username here]</div> <i class="fa-solid fa-crown"></i>
-            </div>
-
-            <!-- You Template-->
-            <div class="viewer_you">
-                <i class="fa-solid fa-user"></i> <div id="viewer_username">[Username here]</div>
-            </div>
-
-            <!-- Others Template -->
-            <div class="viewer">
-                <i class="fa-solid fa-user"></i> <div id="viewer_username">[Username here]</div>
-            </div>
-
-            <!-- Other + Host Template-->
-            <div class="viewer">
-                <i class="fa-solid fa-user"></i> <div id="viewer_username">[Username here]</div> <i class="fa-solid fa-crown"></i>
-            </div>
 
         </div>
 
@@ -64,15 +60,14 @@
             <table>
                 <tr>
                     <!-- Movie Img-->
-                    <td><img src="../../static/images/template_movie.jpg" loading="lazy" id="movie_image"></td>
+                    <td><img src="" loading="lazy" id="movie_image"></td>
                     <td>
                         <!-- Movie Title -->
-                        <h1 class="movie_title" id="movie_title">Spiderman: Noway Home</h1>
+                        <h1 class="movie_title" id="movie_title"></h1>
 
                         <!-- Movie Description -->
                         <!-- TODO Fix weird description scaling on long description -->
-                        <p class="movie_description" id="movie_description">Discription here about the movie,
-                            note this is a dummy description please reffer to the api.</p>
+                        <p class="movie_description" id="movie_description"></p>
                     </td>
                 </tr>
             </table>

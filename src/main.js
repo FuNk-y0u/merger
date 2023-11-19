@@ -8,15 +8,16 @@ const create_window = () =>{
     const window = new BrowserWindow({
         width: 854,
         height: 480,
-        "minHeight": 480,
-        "minWidth": 854,
+        "minHeight": 630,
+        "minWidth": 1130,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
             devTools: true,
         }
     });
-    
+    //disables menu
+	window.setMenu(null);
     window.loadFile(`pages/loading_page/loading_page.html`);
 
     event_main.on('connect_success', () => {

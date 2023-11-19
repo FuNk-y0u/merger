@@ -7,7 +7,7 @@ const response_status = {
 };
 
 const server_ip = "https://merger-dev-pfqf.2.sg-1.fl0.io";
-// const server_ip = "http://localhost:8080";
+//const server_ip = "http://localhost:8080";
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -75,6 +75,25 @@ const redirect_page = async (page_name, params = null) => {
 	}
 	await loose_redirect(page_name, params);
 }
+
+const loose_redirect_parent = async (page_name, params = null) => {
+	let root_path = localStorage.getItem("root_path");
+
+	let url = `${root_path}/${page_name}/${page_name}.html`;
+	if (params) url += "?" + params;
+
+	parent.window.location.href = url;
+}
+
+const redirect_page_parent = async (page_name, params = null) => {
+	let res = await auth();
+	if (res.status != response_status.SUCESS) {
+		alert(res.log);
+		return;
+	}
+	await loose_redirect_parent(page_name, params);
+}
+
 
 function srt_to_vtt(data) {
 	// remove dos newlines
@@ -146,6 +165,7 @@ export {
 	auth,
 	loose_redirect,
 	redirect_page,
+	redirect_page_parent,
 	srt_to_vtt,
 	get_random_int
 }

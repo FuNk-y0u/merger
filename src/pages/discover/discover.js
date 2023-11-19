@@ -29,4 +29,3 @@ let display_eager = (id) => {
         document.getElementById(id).getElementsByClassName("non_eager_div")[0].style.display = 'none';
     }
 }
-

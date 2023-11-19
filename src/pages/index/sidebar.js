@@ -23,7 +23,7 @@ discover_button.addEventListener("click", () => {
 })
 
 join_theatre_button.addEventListener("click", () => {
-    iframe.src ='../theatre/theatre.html';
+    iframe.src ='../join_theatre/join_theatre.html';
     join_theatre_button.querySelector(".a_page").classList.add("selected");
     discover_button.querySelector(".a_page").classList.remove("selected");
     comming_soon_button.querySelector(".a_page").classList.remove("selected");
