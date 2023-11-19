@@ -75,6 +75,7 @@ def get_video_list() -> Response:
 		videos.update({
 			movie.id: {
 				"title": movie.title,
+				"description": movie.description,
 				"poster_url": movie.poster_url,
 				"video_url": movie.video_url
 			}
@@ -84,4 +85,41 @@ def get_video_list() -> Response:
 		SUCESS,
 		"Videos.",
 		[videos]
+	).as_json()
+
+def get_video_metadata() -> Response:
+	payload = request.get_json()
+
+	if not verify_key(["video_id"], payload):
+		return MResponse(
+			FAILED,
+			"`id` are the required payload fields.",
+			[]
+		).as_json()
+
+	id = payload["video_id"]
+
+	movie = Movie.query.filter_by(id = id).first()
+	if not movie :
+		return MResponse(
+			FAILED,
+			f"Invalid video id: {id}",
+			[]
+		).as_json()
+
+	if not movie.uploaded:
+		return MResponse(
+			FAILED,
+			f"Movie {id} hasnt been uploaded yet.",
+			[]
+		).as_json()
+
+	return MResponse(
+		SUCESS,
+		f"Sucessfully fetched vide url.",
+		[{
+			"title": movie.title,
+			"description": movie.description,
+			"poster_url": movie.poster_url
+		}]
 	).as_json()
