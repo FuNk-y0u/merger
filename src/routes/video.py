@@ -9,7 +9,7 @@ def get_video() -> Response:
 	if not verify_key(["video_id"], payload):
 		return MResponse(
 			FAILED,
-			"`id` are the required payload fields.",
+			"`video_id` are the required payload fields.",
 			[]
 		).as_json()
 
@@ -87,13 +87,52 @@ def get_video_list() -> Response:
 		[videos]
 	).as_json()
 
+
+def search_video() -> Response:
+	payload = request.get_json()
+
+	if not verify_key(["title"], payload):
+		return MResponse(
+			FAILED,
+			"`title` are the required payload fields.",
+			[]
+		).as_json()
+
+	title = payload["title"]
+
+	query = Movie.query.filter(Movie.title.ilike(f"%{title}%")).all()
+	if not query:
+		return MResponse(
+			FAILED,
+			f"Movie with title `{title}` cannot be found.",
+			[]
+		).as_json()
+
+	videos = {}
+	for movie in query:
+		videos.update({
+			movie.id: {
+				"title": movie.title,
+				"description": movie.description,
+				"poster_url": movie.poster_url,
+				"video_url": movie.video_url
+			}
+		})
+
+	return MResponse(
+		SUCESS,
+		"Videos.",
+		[videos]
+	).as_json()
+
+
 def get_video_metadata() -> Response:
 	payload = request.get_json()
 
 	if not verify_key(["video_id"], payload):
 		return MResponse(
 			FAILED,
-			"`id` are the required payload fields.",
+			"`video_id` are the required payload fields.",
 			[]
 		).as_json()
 
