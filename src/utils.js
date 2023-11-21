@@ -6,8 +6,8 @@ const response_status = {
 	NOT_FOUND			: 404
 };
 
-//const server_ip = "https://merger-dev-pfqf.2.sg-1.fl0.io";
-const server_ip = "http://localhost:8080";
+const server_ip = "https://merger-dev-pfqf.2.sg-1.fl0.io";
+//const server_ip = "http://localhost:8080";
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
