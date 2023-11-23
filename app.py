@@ -44,9 +44,10 @@ app.add_url_rule("/lobby_get",               view_func = lobby_get,             
 app.add_url_rule("/lobby_get_members",       view_func = lobby_get_members,       methods = ["POST"])
 
 # Video system
-app.add_url_rule("/get_video",      view_func = get_video,      methods = ["POST"])
-app.add_url_rule("/get_video_list", view_func = get_video_list, methods = ["POST"])
-app.add_url_rule("/search_video", view_func = search_video, methods = ["POST"])
+app.add_url_rule("/get_video",          view_func = get_video,          methods = ["POST"])
+app.add_url_rule("/get_total_page_cnt", view_func = get_total_page_cnt, methods = ["POST"])
+app.add_url_rule("/get_video_list",     view_func = get_video_list,     methods = ["POST"])
+app.add_url_rule("/search_video",       view_func = search_video,       methods = ["POST"])
 app.add_url_rule("/get_video_metadata", view_func = get_video_metadata, methods = ["POST"])
 
 # Database system

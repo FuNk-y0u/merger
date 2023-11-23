@@ -40,6 +40,34 @@ def get_video() -> Response:
 	).as_json()
 
 
+def get_total_page_cnt() -> Response:
+	payload = request.get_json()
+
+	if not verify_key(["uploaded", "per_page"], payload):
+		return MResponse(
+			FAILED,
+			"`uploaded`, `per_page` are the required payload fields.",
+			[]
+		).as_json()
+
+	uploaded = payload["uploaded"]
+	per_page = payload["per_page"]
+
+	query = Movie.query.filter_by(uploaded=uploaded).all()
+	movies = len(query)
+
+	if movies % per_page == 0:
+		total_cnt = movies / per_page
+	else:
+		total_cnt = int(movies / per_page) + 1
+
+	return MResponse(
+		SUCESS,
+		"Total page count.",
+		[total_cnt]
+	).as_json()
+
+
 def get_video_list() -> Response:
 	payload = request.get_json()
 
