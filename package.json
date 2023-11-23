@@ -1,5 +1,5 @@
 {
-  "name": "merger-revamped",
+  "name": "merger",
   "version": "1.0.0",
   "description": "Application to watch movies together",
   "main": "main.js",
@@ -23,7 +23,7 @@
       "icon": "build/icon.ico"
     }
   },
-  "author": "Padkiyo.inc Teach",
+  "author": "Padkiyo.inc Tech",
   "license": "ISC",
   "devDependencies": {
     "electron": "^26.4.2",

@@ -17,7 +17,7 @@ const create_window = () =>{
         }
     });
     //disables menu
-	//window.setMenu(null);
+	window.setMenu(null);
     window.loadFile(`src/pages/loading_page/loading_page.html`);
 
     event_main.on('connect_success', () => {
