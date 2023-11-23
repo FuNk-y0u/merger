@@ -5,8 +5,12 @@ import {
 	redirect_page,
 	srt_to_vtt,
 	sleep
-} from "./../../utils/utils.js";
-import { extract_m3u8_pl } from "./../../utils/extractor.js"
+} from "../../utils.js";
+import { extract_m3u8_pl } from "../../utils/extractor.js";
+import { Modal } from "../../static/js/modal.js";
+const modal = new Modal(
+	document.getElementById("modal_root")
+);
 
 class Player {
 	constructor(player_id, host, url, subtitle, callback) {
@@ -29,7 +33,7 @@ class Player {
 
 	async add_subtitle() {
 		if (!this.subtitle) {
-			alert("This movie doesnt include subtitles. Sorry!");
+			console.log("no subtitles found");
 			return;
 		}
 
@@ -81,6 +85,7 @@ class Player {
 				}
 			}
 		}
+		console.log(player_id);
 		const player = new Plyr(`#${player_id}`, params);
 		return player;
 	}

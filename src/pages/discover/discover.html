@@ -1,0 +1,50 @@
+<!-- MERGER DISCOVER PAGE -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- css and js -->
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <script src="discover.js"></script>
+    <script type="module" src="show_controller.js"></script>
+
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/0d4140c03e.js" crossorigin="anonymous"></script>
+</head>
+
+<body ondragstart="return false;" ondrop="return false;">
+
+    <!-- featured section -->
+    <div class="featured">
+        <div><h1 class="featured_title">Find and watch movies togther in merger</h1></div>
+        <input class="search_bar" type="text" placeholder="Search movies.. "></input>
+        <button class="search_button"><i class="fas fa-search"></i></button>
+    </div>
+
+    <!-- pagination section -->
+
+    <div class="pagination">
+        <!-- pagination button left -->
+        <button id="pagination_left"><i class="fa-solid fa-arrow-left"></i></button>
+        <!-- pagination data -->
+        <p id="pagination_data">1</p>
+        <!-- pagination button right -->
+        <button id="pagination_right"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
+    <!-- display title  section -->
+    <h1 class="display_title" id="display_title">Featured movies</h1>
+
+		<!-- display error message -->
+		<p style="color: white;" id="error_msg"></p>
+
+    <!-- movies section -->
+    <div class="movie_grid" id="movie_grid">        
+    </div>
+
+</body>
+</html>

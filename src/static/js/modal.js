@@ -35,8 +35,8 @@ class Modal {
 
 		// Modal dialog
 		let modal_dialog = document.createElement("div");
-		modal_dialog.setAttribute("class", "modal-dialog");
-
+		modal_dialog.setAttribute("class", "modal-dialog modal-xl");
+		modal_dialog.setAttribute("id", "modal");
 		// Modal contents
 		let modal_content = document.createElement("div");
 		modal_content.setAttribute("class", "modal-content");

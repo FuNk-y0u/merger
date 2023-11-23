@@ -1,67 +1,67 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-			integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-			crossorigin="anonymous">
-		<script
-			src="https://kit.fontawesome.com/0d4140c03e.js"
-			crossorigin="anonymous">
-		</script>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-			integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-			crossorigin="anonymous">
-		</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<script type="module" src="coming_soon.js"></script>
-		<link rel="stylesheet" href="coming_soon.css">
-	</head>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/0d4140c03e.js" crossorigin="anonymous"></script>
 
-	<body>
+    <!-- Bootstrap  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-		<!-- Nav bar -->
-		<div>
-			<nav class="navbar bg-body-tertiary">
-				<div class="container-fluid">
-					<a class="navbar-brand" id="return" href="#"><i class="fa-solid fa-arrow-left"></i></a>
-					<form class="d-flex" onsubmit="return false;" role="search">
-						<input class="form-control me-2" id="movie_name" type="search" placeholder="Movie name" aria-label="Movie name">
-						<button class="btn btn-outline-success" id="add_movie" data-bs-toggle="modal" data-bs-target="#movie_selection_modal">Add</button>
-					</form>
-				</div>
-			</nav>
-		</div>
+    <!-- Css -->
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+    <!-- featured section -->
+    <div class="featured">
+        <div><h1 class="featured_title">Movie not found? Add it to upcomings</h1></div>
+        <input class="search_bar" type="text" placeholder="Search movies.. " id="movie_search"></input>
+        <button class="search_button" id="add_movie_button" data-bs-toggle="modal" data-bs-target="#movie_selection_modal"><i class="fa-solid fa-plus"></i></button>
+    </div>
+    <div class="pagination">
+        <!-- pagination button left -->
+        <button id="pagination_left"><i class="fa-solid fa-arrow-left"></i></button>
+        <!-- pagination data -->
+        <p id="pagination_data">1</p>
+        <!-- pagination button right -->
+        <button id="pagination_right"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+    <!-- display title  section -->
+    <h1 class="display_title p-5" id="display_title">Upcoming Movies</h1>
 
-		<h2> Coming Soon! </h2>
+    <!-- movies section -->
+    <div class="movie_grid" id="movie_grid">
+    </div>
 
-		<!-- Movie grid -->
-		<div class="movie-grid" id="movie_grid">
-		</div>
+    <!-- Vertically centered scrollable modal -->
+    <div id="modal_root">
+    </div>  
+    <!-- Movie selection modal -->
+    <div id="movie_selection_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-		<div id="modal_root"></div>
+                <div class="modal-header">
+                    <h4 class="modal-title"><div class="loading" id="loading_div">
+                        <div class="load" id="loading_animation"></div><p>Fetching Data ..</p>
+                    </div><br>Which Movies are you reffering to?</h4>
+                </div>
 
-		<!-- Movie selection modal -->
-		<div id="movie_selection_modal" class="modal fade" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
+                <div class="modal-body movie_grid" id="movie_selector_body">
+                    
+                </div>
 
-					<div class="modal-header">
-						<h4 class="modal-title">Which movie are you refering to?</h4>
-					</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
 
-					<div class="modal-body movie-grid" id="movie_selector_body">
-					</div>
-
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-	</body>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="coming_soon.js" type="module"></script> 
 </html>

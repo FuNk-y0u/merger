@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Merger</title>
+
+    <!-- css-->
+    <link rel="stylesheet" href="../../static/css/styles.css">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/0d4140c03e.js" crossorigin="anonymous"></script>    
+</head>
+
+<body ondragstart="return false;" ondrop="return false;">
+    <nav class="sidebar">
+
+        <a href="#" class="logo">Merger</a>
+
+        <div class="menu-content">
+            <ul class="menu-items">
+                <li class="item" id="discover">
+                    <a href="#" class="a_page"><i class="fa-solid fa-compass fa-xl"></i>Discover</a>
+                </li>
+                <li class="item" id="join_theatre">
+                    <a href="#" class="a_page"><i class="fa-solid fa-film fa-xl"></i>Join Theatre</a>
+                </li>
+                <li class="item" id="comming_soon">
+                    <a href="#" class="a_page"><i class="fa-solid fa-clock fa-xl"></i>Coming soon</a>
+                </li>
+                <li class="item" id="settings">
+                    <a href="#" class="a_page"><i class="fa-solid fa-cog fa-xl"></i>Settings</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav class="navbar">
+        <i class="fa-solid fa-bars fa-xl" id="sidebar-close"></i>
+    </nav>
+
+    <main class="main-display">
+        <iframe id="iframe" src="../discover/discover.html"></iframe>
+    </main>
+
+</body>
+    <script type="module" src="sidebar.js"></script>
+</html>

@@ -3,7 +3,7 @@ import {
 	server_query,
 	response_status,
 	redirect_page,
-} from "./../../utils/utils.js";
+} from "../../utils.js";
 
 
 /*
