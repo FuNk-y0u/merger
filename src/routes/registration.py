@@ -2,6 +2,9 @@ from src.inc import *
 from src.model import pdb, User
 from src.utils import verify_key
 from src.defines import *
+from src.routes.auth import *
+from src.routes.verify_mail import *
+from src.template.email_template import *
 
 def signup() -> Response:
 	payload = request.get_json()
@@ -35,9 +38,20 @@ def signup() -> Response:
 	pdb.session.add(new_user);
 	pdb.session.commit();
 
+	# Sending email for verification
+	token = jwt.encode({
+			'email': email,
+			'exp': datetime.utcnow() + timedelta(minutes=30),
+		},
+		os.getenv('SECRET_KEY')
+	)
+	sv_url = os.getenv("SV_URL")
+	confirm_url = f"{sv_url}/verify_mail/{token}"
+	send_mail(email, email_subject, get_email_template(confirm_url))
+
 	return MResponse(
 		SUCESS,
-		f"Sucessfully created account as `{username}`.",
+		f"Check your email for verification.",
 		[]
 	).as_json()
 
@@ -70,7 +84,12 @@ def login() -> Response:
 			[]
 		).as_json()
 
-	#TODO: Check for email verification
+	if not query.is_verified:
+		return MResponse(
+			FAILED,
+			f"Email hasn't been verified yet.",
+			[]
+		).as_json()
 
 	jwt_token = jwt.encode(
 		{
@@ -87,3 +106,44 @@ def login() -> Response:
 		f"Sucessfully logged in as `{query.username}`.",
 		[{"token": jwt_token}]
 	).as_json()
+
+
+def connection_check() -> Response:
+	return MResponse(
+		SUCESS,
+		f"server connection sucessfull",
+		[{}]
+	).as_json()
+
+
+@auth_token
+def get_user() -> Response:
+	payload = request.get_json()
+
+	if not verify_key(["id"], payload):
+		return MResponse(
+			FAILED,
+			"`id` are the required payload fields.",
+			[]
+		).as_json()
+
+	id = payload["id"]
+	query = User.query.filter_by(id = id).first()
+	if not query:
+		return MResponse(
+			FAILED,
+			"Invalid user id",
+			[]
+		).as_json()
+
+	user = {
+		"email"   : query.email,
+		"username": query.username
+	}
+
+	return MResponse(
+		SUCESS,
+		"Sucessfully fetched user data",
+		[user]
+	).as_json()
+
