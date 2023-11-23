@@ -85,7 +85,7 @@ submitButton.addEventListener('click', async () => {
             username: username,
             password: password
         }
-        let response = await server_query('/signup',"POST", payload);
+        let response = await server_query('/signup',"POST", payload, false);
         if(response.status == response_status.FAILED){
             errorText.innerHTML = response.log;
             return;

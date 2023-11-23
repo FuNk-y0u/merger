@@ -11,7 +11,7 @@ const server_ip = "https://merger-dev-pfqf.2.sg-1.fl0.io";
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const server_query = async (endpoint, method, payload) => {
+const server_query = async (endpoint, method, payload, retry=true) => {
 	let params = {
 		method: method,
 		headers: {
@@ -27,7 +27,7 @@ const server_query = async (endpoint, method, payload) => {
 	let response = await fetch(server_ip + endpoint, params);
 
 	// Retry the request if got 500 internal server error
-	if (response.status == 500) {
+	if (retry && response.status == 500) {
 		response = await fetch(server_ip + endpoint, params);
 	}
 
