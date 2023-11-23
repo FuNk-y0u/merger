@@ -7,53 +7,60 @@ from src.routes.verify_mail import *
 from src.template.email_template import *
 
 def signup() -> Response:
-	payload = request.get_json()
-
-	if not verify_key(["email","username","password"], payload):
+	try:
+		payload = request.get_json()
+	
+		if not verify_key(["email","username","password"], payload):
+			return MResponse(
+				FAILED,
+				"`email`, `username`, `password` are the required payload fields.",
+				[]
+			).as_json()
+	
+		email    = payload["email"]
+		username = payload["username"]
+		password = payload["password"]
+	
+		query = User.query.filter_by(email=email).first()
+		if query:
+			return MResponse(FAILED, f"email: `{email}` already taken.", []).as_json()
+	
+		id = str(uuid.uuid4())
+		salt = str(secrets.token_hex(32))
+		password += salt
+	
+		new_user = User(
+			id=id,
+			email=email,
+			username=username,
+			password=password,
+			password_salt=salt
+		)
+		pdb.session.add(new_user);
+		pdb.session.commit();
+	
+		# Sending email for verification
+		token = jwt.encode({
+				'email': email,
+				'exp': datetime.utcnow() + timedelta(minutes=30),
+			},
+			os.getenv('SECRET_KEY')
+		)
+		sv_url = os.getenv("SV_URL")
+		confirm_url = f"{sv_url}/verify_mail/{token}"
+		send_mail(email, email_subject, get_email_template(confirm_url))
+	
 		return MResponse(
-			FAILED,
-			"`email`, `username`, `password` are the required payload fields.",
+			SUCESS,
+			f"Check your email for verification.",
 			[]
 		).as_json()
-
-	email    = payload["email"]
-	username = payload["username"]
-	password = payload["password"]
-
-	query = User.query.filter_by(email=email).first()
-	if query:
-		return MResponse(FAILED, f"email: `{email}` already taken.", []).as_json()
-
-	id = str(uuid.uuid4())
-	salt = str(secrets.token_hex(32))
-	password += salt
-
-	new_user = User(
-		id=id,
-		email=email,
-		username=username,
-		password=password,
-		password_salt=salt
-	)
-	pdb.session.add(new_user);
-	pdb.session.commit();
-
-	# Sending email for verification
-	token = jwt.encode({
-			'email': email,
-			'exp': datetime.utcnow() + timedelta(minutes=30),
-		},
-		os.getenv('SECRET_KEY')
-	)
-	sv_url = os.getenv("SV_URL")
-	confirm_url = f"{sv_url}/verify_mail/{token}"
-	send_mail(email, email_subject, get_email_template(confirm_url))
-
-	return MResponse(
-		SUCESS,
-		f"Check your email for verification.",
-		[]
-	).as_json()
+	except Exception as e:
+		return MResponse(
+			FAILEd,
+			e,
+			[]
+		).as_json()
 
 
 def login() -> Response:
