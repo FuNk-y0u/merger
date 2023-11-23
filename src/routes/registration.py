@@ -57,7 +57,7 @@ def signup() -> Response:
 		).as_json()
 	except Exception as e:
 		return MResponse(
-			FAILEd,
+			FAILED,
 			e,
 			[]
 		).as_json()
