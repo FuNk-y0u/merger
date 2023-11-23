@@ -18,14 +18,14 @@ const create_window = () =>{
     });
     //disables menu
 	//window.setMenu(null);
-    window.loadFile(`pages/loading_page/loading_page.html`);
+    window.loadFile(`src/pages/loading_page/loading_page.html`);
 
     event_main.on('connect_success', () => {
-        window.loadFile(`pages/init.html`);
+        window.loadFile(`src/pages/init.html`);
     });
 
     event_main.on('logout',() => {
-        window.loadFile(`pages/login/login.html`);
+        window.loadFile(`src/pages/login/login.html`);
     })
 }
 

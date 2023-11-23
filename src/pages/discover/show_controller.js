@@ -129,7 +129,7 @@ search_button.addEventListener("click", async () => {
 	let payload = {
 		title: search_bar.value
 	};
-
+	document.getElementById("error_msg").innerHTML = "";
 	let response = await server_query("/search_video", "POST", payload);
 	if (response.status != response_status.SUCESS) {
 		movie_grid.innerHTML = "";

@@ -2,9 +2,9 @@
   "name": "merger-revamped",
   "version": "1.0.0",
   "description": "Application to watch movies together",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "electron src/main.js",
+    "start": "electron main.js",
     "dist": "electron-builder"
   },
   "build": {

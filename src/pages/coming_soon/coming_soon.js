@@ -100,7 +100,7 @@ add_button.addEventListener('click', async() => {
 		token: localStorage.getItem("token"),
 		movie_name: movie_name
 	};
-
+	document.getElementById("loading_animation").style.display = 'block';
     let response = await server_query("/search_new_movie", "POST", payload);
 
     if (response.status != response_status.SUCESS) {
