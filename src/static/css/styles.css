@@ -207,8 +207,8 @@ i{
 
 .movie_grid .show img{
     width: 180px;
-    height: 250px;
-    border-radius: 10px;
+    height: 250px;  
+    padding-top: 10px;
 }
 
 .movie_grid .show:hover{

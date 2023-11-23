@@ -71,6 +71,8 @@ const add_event_listener = (element, movies) => {
 		modal.set_body(response.log);
 		modal.show();
 
+		document.getElementById("movie_search").value ="";
+
 		await render_video_cards();
 	});
 }
@@ -100,7 +102,7 @@ add_button.addEventListener('click', async() => {
 		token: localStorage.getItem("token"),
 		movie_name: movie_name
 	};
-	document.getElementById("loading_animation").style.display = 'block';
+	document.getElementById("loading_div").style.display = 'block';
     let response = await server_query("/search_new_movie", "POST", payload);
 
     if (response.status != response_status.SUCESS) {
@@ -109,7 +111,7 @@ add_button.addEventListener('click', async() => {
 		modal.show();
 		return;
 	}
-    document.getElementById("loading_animation").style.display = 'none';
+    document.getElementById("loading_div").style.display = 'none';
 
     let movies = response.ext[0];
     console.log(movies)
