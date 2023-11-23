@@ -83,7 +83,7 @@ class QueueHandler:
 	def __torr_error_callback(self, movie_id: str) -> None:
 		self.torr_queue.pop(movie_id)
 		self.movie_queue.pop(movie_id)
-		self.logger.error(f"[TORR]({self.worker_id}) -- id: {movie_id} - Failed torrent install, removed from the queue")
+		self.logger.error(f"[TORR]({worker_id}) -- id: {movie_id} - Failed torrent install, removed from the queue")
 
 		state_manager.update_queue(
 			QueueType.GLOBAL,
@@ -115,7 +115,7 @@ class QueueHandler:
 	def __ftp_error_callback(self, worker_id: int, movie_id: str) -> None:
 		self.ftp_queue.pop(movie_id)
 		self.movie_queue.pop(movie_id)
-		self.logger.error(f"[FTP]({self.worker_id}) -- id: {movie_id} - Failed ftp upload, removed from the queue")
+		self.logger.error(f"[FTP]({worker_id}) -- id: {movie_id} - Failed ftp upload, removed from the queue")
 
 		state_manager.update_queue(
 			QueueType.GLOBAL,
