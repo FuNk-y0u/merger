@@ -8,8 +8,6 @@ const movie_selector_modal = new bootstrap.Modal(
 	document.getElementById("movie_selection_modal")
 );
 
-let page_no = 1;
-
 import {
 	server_ip,
 	server_query,
@@ -19,6 +17,21 @@ import {
 	get_random_int,
     redirect_page_parent
 } from "../../utils.js";
+
+
+const per_page = 10;
+let total_page_cnt = 0;
+let page_no = 1;
+
+const get_total_page_cnt = async () => {
+	let payload = {
+		uploaded: true,
+		per_page: per_page
+	};
+	let response = await server_query("/get_total_page_cnt", "POST", payload);
+	return response.ext[0];
+}
+
 
 let paginate_left = document.querySelector("#pagination_left");
 let paginate_right = document.querySelector("#pagination_right");
@@ -33,7 +46,7 @@ paginate_left.addEventListener("click", () => {
 })
 
 paginate_right.addEventListener("click", () => {
-    if(page_no > 0){
+    if(page_no < total_page_cnt){
         page_no += 1;
         page_no_div.innerHTML = page_no;
         render_video_cards();
@@ -63,10 +76,19 @@ const add_event_listener = (element, movies) => {
 }
 
 let add_button = document.querySelector("#add_movie_button");
+let search_bar = document.querySelector(".search_bar");
+
+search_bar.addEventListener("keypress", (e) => {
+	if (e.key == "Enter") {
+		e.preventDefault();
+		add_button.click();
+	}
+})
+
 add_button.addEventListener('click', async() => {
     const movie_selector_body = document.getElementById("movie_selector_body");
 	movie_selector_body.innerHTML = ""
-    let movie_name = document.querySelector(".search_bar").value;
+    let movie_name = search_bar.value;
     if (!movie_name) {
 		modal.set_title("Error");
 		modal.set_body("Movie name cannot be empty.");
@@ -128,8 +150,8 @@ const render_video_cards = async () => {
 
 	let params = {
 		uploaded: false,
-		page_no: page_no,
-		per_page: 10
+		page_no : page_no,
+		per_page: per_page
 	};
 
 	let response = await server_query("/get_video_list", "POST", params);
@@ -148,4 +170,7 @@ const render_video_cards = async () => {
 	}
 }
 
-window.onload = render_video_cards;
+window.onload = async () => {
+	total_page_cnt = await get_total_page_cnt();
+	render_video_cards();
+}

@@ -8,7 +8,18 @@ import {
 
 let movie_grid = document.getElementById("movie_grid");
 
+const per_page = 10;
+let total_page_cnt = 0;
 let page_no = 1;
+
+const get_total_page_cnt = async () => {
+	let payload = {
+		uploaded: true,
+		per_page: per_page
+	};
+	let response = await server_query("/get_total_page_cnt", "POST", payload);
+	return response.ext[0];
+}
 
 let paginate_left = document.querySelector("#pagination_left");
 let paginate_right = document.querySelector("#pagination_right");
@@ -23,7 +34,8 @@ paginate_left.addEventListener("click", () => {
 })
 
 paginate_right.addEventListener("click", () => {
-	if(page_no > 0){
+	console.log(total_page_cnt);
+	if(page_no < total_page_cnt){
 		page_no += 1;
 		page_no_div.innerHTML = page_no;
 		render_show_cards();
@@ -83,8 +95,8 @@ const add_event_listener = (element, shows) => {
 const render_show_cards = async () => {
 	let params= {
 		uploaded: true,
-		page_no: page_no,
-		per_page: 10
+		page_no : page_no,
+		per_page: per_page
 	};
 
 	let response = await server_query("/get_video_list", "POST", params);
@@ -137,4 +149,7 @@ search_button.addEventListener("click", async () => {
 })
 
 
-window.onload = render_show_cards;
+window.onload = async () => {
+	total_page_cnt = await get_total_page_cnt();
+	render_show_cards();
+}

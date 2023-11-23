@@ -24,22 +24,24 @@ const server_query = async (endpoint, method, payload) => {
 		params.body = JSON.stringify(payload);
 	}
 
-	return await fetch(server_ip + endpoint, params)
-	.then(async (response) => {
-		if (response.ok) {
-			let result = await response.text();
-			let data = JSON.parse(result);
-			return data;
-		}
-		throw new Error(`Failed to fetch at endpoint ${endpoint}`);
-	})
-	.catch((error) => {
-		return {
-			log: error,
-			status: response_status.FAILED,
-			ext: []
-		};
-	});
+	let response = await fetch(server_ip + endpoint, params);
+
+	// Retry the request if got 500 internal server error
+	if (response.status == 500) {
+		response = await fetch(server_ip + endpoint, params);
+	}
+
+	if (response.ok) {
+		let result = await response.text();
+		let data = JSON.parse(result);
+		return data;
+	}
+
+	return {
+		log: `Failed to fetch at endpoint ${endpoint}`,
+		status: response_status.FAILED,
+		ext: []
+	};
 }
 
 const auth = async () => {
