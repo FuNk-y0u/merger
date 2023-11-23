@@ -2,6 +2,7 @@ from utils.inc     import *
 from utils.log     import *
 from utils.defines import *
 
+from state_manager import *
 from ftp_handler.ftp_cli import *
 
 
@@ -22,15 +23,28 @@ class FTP_Worker:
 		self.ftp.login()
 
 		# Total bytes and uploaded bytes
-		self.total     = 0
+		self.total     = 1     # Defaults to 1 to avoid 0/0
 		self.uploaded  = 0
+
+		self.update_state()
+
+	def update_state(self) -> None:
+		progress = (self.uploaded / self.total) * 100
+		state_manager.update_ftp_worker(
+			self.id,
+			self.status,
+			progress
+		)
 
 	def upload_movie(
 		self,
 		movie_info: MovieInfo,
 		sucess_callback: Callable[[str], None],
-		error_callback: Callable[[str], None]
+		error_callback: Callable[[int, str], None]
 	) -> None:
+		self.status = WorkerStatus.OCCUPIED
+		self.update_state()
+
 		file_path  = self.__change_filename(movie_info.id, movie_info.content_path)
 		self.total = os.path.getsize(file_path)
 
@@ -39,16 +53,20 @@ class FTP_Worker:
 			self.__handle_progress
 		)
 		if not res:
-			self.logger.error(f"id: {movie_info.id} - Failed to upload through ftp")
-			error_callback(movie_info.id)
+			self.status = WorkerStatus.HALT
+			self.update_state()
+			error_callback(self.id, movie_info.id)
 			return
 
 		self.status = WorkerStatus.HALT
+		self.update_state()
+
 		time.sleep(self.FTP_UPDATE_TIME)
 
-		self.total     = 0
+		self.total     = 1
 		self.uploaded  = 0
 		self.status = WorkerStatus.FREE
+		self.update_state()
 
 		sucess_callback(movie_info.id)
 
@@ -70,4 +88,5 @@ class FTP_Worker:
 
 	def __handle_progress(self, sent: bytes) -> None:
 		self.uploaded += len(sent)
+		self.update_state()
 

@@ -1,6 +1,5 @@
 from mergerdb import *
 
-from utils.log import *
 
 class App:
 	def __init__(self):
@@ -8,11 +7,6 @@ class App:
 
 		#TODO: Implement process_info for cli
 		#TODO: Implement cli
-		"""
-		"process_info" file stores data related to current process
-		like current queues and worker's progress
-		"""
-		open(PROCESS_FILE, "w").write("{}")
 
 		self.app = Flask(__name__)
 		CORS(self.app)

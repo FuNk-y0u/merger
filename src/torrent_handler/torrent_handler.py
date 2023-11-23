@@ -35,7 +35,7 @@ class TorrentHandler:
 		self,
 		queue: dict[str, MovieInfo],
 		sucess_callback: Callable[[str, str], None],
-		error_callback: Callable[[str], None]
+		error_callback: Callable[[int, str], None]
 	) -> None:
 		worker = self.get_free_worker()
 		if not worker: return
@@ -45,7 +45,7 @@ class TorrentHandler:
 			movie_info = queue[movie_id]
 
 			if movie_info.status == MovieStatus.TORR_QUEUED:
-				return
+				continue
 			movie_info.status = MovieStatus.TORR_QUEUED
 
 			threading.Thread(

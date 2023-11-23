@@ -1,6 +1,6 @@
 from utils.inc import *
 
-PROCESS_FILE = "process_info.json"
+STATE_FILE = "state.json"
 
 pdb = SQLAlchemy()
 

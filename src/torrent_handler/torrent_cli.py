@@ -40,3 +40,6 @@ class TorrentCLI:
 
 		return completed
 
+	def remove_torr(self, movie_hash: str) -> None:
+		self.qb.delete(movie_hash)
+

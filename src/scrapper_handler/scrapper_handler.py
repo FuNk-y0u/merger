@@ -25,12 +25,11 @@ class ScrapperHandler:
 			movie_info = queue[movie_id]
 
 			if movie_info.status == MovieStatus.SCPR_QUEUED:
-				return
+				continue
 			movie_info.status = MovieStatus.SCPR_QUEUED
 
 			url = self.scrapper.scrape_url(movie_info.id)
 			if not url:
-				self.logger.error(f"id: {movie_info.id} - Failed to scrape url.")
 				error_callback(movie_info.id)
 				return
 

@@ -27,7 +27,7 @@ class FTP_Handler:
 		self,
 		queue: dict[str, MovieInfo],
 		sucess_callback: Callable[[str], None],
-		error_callback: Callable[[str], None]
+		error_callback: Callable[[int, str], None]
 	) -> None:
 		worker = self.get_free_worker()
 		if not worker: return
@@ -37,7 +37,7 @@ class FTP_Handler:
 			movie_info = queue[movie_id]
 
 			if movie_info.status == MovieStatus.FTP_QUEUED:
-				return
+				continue
 			movie_info.status = MovieStatus.FTP_QUEUED
 
 			threading.Thread(

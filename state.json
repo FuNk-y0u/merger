@@ -1,0 +1,40 @@
+{
+  "queue": {
+    "global": [],
+    "torr": [],
+    "ftp": [],
+    "scpr": []
+  },
+  "torr_workers": {
+    "0": {
+      "status": "FREE"
+    },
+    "1": {
+      "status": "FREE"
+    },
+    "2": {
+      "status": "FREE"
+    },
+    "3": {
+      "status": "FREE"
+    }
+  },
+  "ftp_workers": {
+    "0": {
+      "status": "FREE",
+      "progress": 0.0
+    },
+    "1": {
+      "status": "FREE",
+      "progress": 0.0
+    },
+    "2": {
+      "status": "FREE",
+      "progress": 0.0
+    },
+    "3": {
+      "status": "FREE",
+      "progress": 0.0
+    }
+  }
+}
