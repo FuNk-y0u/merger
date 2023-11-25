@@ -20,12 +20,19 @@ class SubtitleScrapper:
 		table = page.find(id = "search_results")
 		rows = table.find_all("tr", { "class": "change" })[1:]
 
+		captions = {}
+
 		for row in rows:
 			tds = row.find_all("td")
 			lang = tds[1].find("a")["title"]
 			if lang == "English":
-				return self.url + tds[4].find("a")["href"]
-		return None
+				anchor = tds[4].find("a")
+				url = self.url + anchor["href"]
+				rating = int(anchor.contents[0].strip("x\n"))
+				captions.update({ rating: url })
+
+		high_rate = sorted(list(captions.keys()), reverse = True)[0]
+		return captions[high_rate]
 
 
 class Scrapper:
